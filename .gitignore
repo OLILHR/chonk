@@ -1,0 +1,15 @@
+.env*
+!*.example
+
+.coverage
+__pycache__/
+.idea/
+.pytest_cache/
+.tox/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# alloy output file
+codebase.md
