@@ -2,10 +2,11 @@
 !*.example
 
 .coverage
-__pycache__/
 .idea/
 .pytest_cache/
 .tox/
+__pycache__/
+htmlcov/
 
 # OS
 .DS_Store
