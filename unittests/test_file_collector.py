@@ -1,4 +1,5 @@
-from alloy.collector import consolidate, read_alloyignore
+from alloy.collector import consolidate
+from alloy.filter import read_alloyignore
 
 
 def test_read_alloyignore(setup_paths, alloyignore_path):
