@@ -1,0 +1,10 @@
+[pylint]
+disable =
+    C0114,  # disable missing-module-docstring
+    C0115,  # disable missing-class-docstring
+    C0116,  # disable missing-function-docstring
+    R0903,  # disable too-few-public-methods
+    W0621,  # disable redefined-outer-name
+    R0801,  # disable duplicate-code
+[pylint."MESSAGES CONTROL"]
+max-line-length = 120
