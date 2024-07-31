@@ -2,8 +2,8 @@ import logging
 import os
 
 import click
-from collector import consolidate
-from filter import parse_extensions
+from alloy.collector import consolidate
+from alloy.filter import parse_extensions
 
 GLOBAL_LOG_LEVEL = logging.INFO
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
