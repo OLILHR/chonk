@@ -4,17 +4,17 @@ from alloy.collector import consolidate, read_alloyignore
 def test_consolidate_excludes_png_and_svg(setup_paths):
     codebase = consolidate(setup_paths["test_data"])
 
-    assert "dummy.md" in codebase
-    assert "dummy.txt" in codebase
-    assert "dummy.py" in codebase
-    assert "dummy.yml" in codebase
+    assert "dummy_md.md" in codebase
+    assert "dummy_txt.txt" in codebase
+    assert "dummy_py.py" in codebase
+    assert "dummy_yml.yml" in codebase
 
-    assert "dummy.png" not in codebase
-    assert "dummy.svg" not in codebase
+    assert "dummy_png.png" not in codebase
+    assert "dummy_svg.svg" not in codebase
 
 
 def test_read_alloyignore(setup_paths):
-    exclude = read_alloyignore(setup_paths["test_data"])
+    exclude = read_alloyignore(setup_paths["test_data"], [])
 
     assert exclude("test.png") is True
     assert exclude("test.svg") is True
