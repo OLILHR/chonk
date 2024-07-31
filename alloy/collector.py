@@ -14,7 +14,7 @@ def consolidate(path, extensions=None):
     or not.
     """
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    exclude_files = read_alloyignore(project_root)
+    exclude_files = read_alloyignore(project_root, extensions)
     codebase = ""
 
     for root, dirs, files in os.walk(path):
@@ -24,7 +24,7 @@ def consolidate(path, extensions=None):
             file_path = os.path.join(root, file)
             relative_path = os.path.relpath(str(file_path), path)
 
-            if exclude_files(relative_path) or not filter_extensions(file_path, extensions):
+            if (extensions and not filter_extensions(file_path, extensions)) or exclude_files(relative_path):
                 continue
             _, file_extension = os.path.splitext(file)
 

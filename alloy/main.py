@@ -36,7 +36,3 @@ def generate_markdown(path, extensions):
 
 if __name__ == "__main__":
     generate_markdown()  # pylint: disable=no-value-for-parameter
-
-# to do:
-# if extension is in .alloyignore, generate the markdown file anyway
-# if no extension is given, just ignore the files in .alloyignore and consolidate the rest

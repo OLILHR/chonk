@@ -1,7 +1,7 @@
 import os
 
 
-def read_alloyignore(project_root):
+def read_alloyignore(project_root, extension_filter):
     """
     Excludes all files, extensions and directories specified in .alloyignore, located inside the root directory.
     """
@@ -18,6 +18,11 @@ def read_alloyignore(project_root):
                 ignore_list.append(line)  # ignore comments in .alloyignore
 
     def exclude_files(file_path):
+        if extension_filter:
+            _, file_extension = os.path.splitext(file_path)
+            if file_extension[1:] in extension_filter:
+                return False
+
         for pattern in ignore_list:
             if pattern.startswith("/"):  # covers absolute paths from the root
                 if file_path.startswith(pattern[1:]):
