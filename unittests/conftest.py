@@ -9,3 +9,8 @@ def setup_paths(request):
     return {
         "test_data": os.path.join(unittests_dir, "data"),
     }
+
+
+@pytest.fixture
+def alloyignore_path(setup_paths):
+    return os.path.join(setup_paths["test_data"], ".alloyignore")

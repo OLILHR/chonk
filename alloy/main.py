@@ -2,6 +2,7 @@ import logging
 import os
 
 import click
+
 from alloy.collector import consolidate
 from alloy.filter import parse_extensions
 

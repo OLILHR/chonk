@@ -17,6 +17,7 @@ def read_alloyignore(project_root, extension_filter):
             if line and not line.startswith("#"):
                 ignore_list.append(line)  # ignore comments in .alloyignore
 
+    # pylint: disable=too-many-return-statements
     def exclude_files(file_path):
         if extension_filter:
             _, file_extension = os.path.splitext(file_path)
