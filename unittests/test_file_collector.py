@@ -2,8 +2,8 @@ from alloy.collector import consolidate
 from alloy.filter import read_alloyignore
 
 
-def test_read_alloyignore(setup_paths, alloyignore_path):
-    exclude = read_alloyignore(setup_paths["test_data"], [])
+def test_read_alloyignore(unittests_directory, alloyignore_path):
+    exclude = read_alloyignore(unittests_directory["test_data"], [])
     with open(alloyignore_path, encoding="utf-8") as f:
         alloyignore = f.read()
 
@@ -18,8 +18,8 @@ def test_read_alloyignore(setup_paths, alloyignore_path):
     assert exclude("test.yml") is False
 
 
-def test_consolidate_excludes_png_and_svg(setup_paths, alloyignore_path):
-    codebase = consolidate(setup_paths["test_data"])
+def test_consolidate_excludes_png_and_svg(unittests_directory, alloyignore_path):
+    codebase = consolidate(unittests_directory["test_data"])
     with open(alloyignore_path, encoding="utf-8") as f:
         alloyignore = f.read()
 

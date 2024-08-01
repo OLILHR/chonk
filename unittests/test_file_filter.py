@@ -1,8 +1,8 @@
 from alloy.collector import consolidate
 
 
-def test_consolidate_specified_filter_extensions(setup_paths, alloyignore_path):
-    filtered_codebase = consolidate(setup_paths["test_data"], extensions=["md", "txt"])
+def test_consolidate_specified_filter_extensions(unittests_directory, alloyignore_path):
+    filtered_codebase = consolidate(unittests_directory["test_data"], extensions=["md", "txt"])
     with open(alloyignore_path, encoding="utf-8") as f:
         alloyignore = f.read()
 
@@ -18,8 +18,8 @@ def test_consolidate_specified_filter_extensions(setup_paths, alloyignore_path):
     assert "dummy_svg.svg" not in filtered_codebase
 
 
-def test_extension_filter_bypasses_alloyignore(setup_paths, alloyignore_path):
-    filtered_codebase = consolidate(setup_paths["test_data"], extensions=["svg"])
+def test_extension_filter_bypasses_alloyignore(unittests_directory, alloyignore_path):
+    filtered_codebase = consolidate(unittests_directory["test_data"], extensions=["svg"])
     with open(alloyignore_path, encoding="utf-8") as f:
         alloyignore = f.read()
 

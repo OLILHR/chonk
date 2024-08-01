@@ -46,9 +46,9 @@ def read_alloyignore(project_root, extension_filter):
 
 def filter_extensions(file_path, extensions):
     """
-    Optional filter to include only certain provided extensions in the consolidated markdown file.
-    If no extensions are provided, all files are considered except files, extensions directories that are explicitly
-    excluded in the specified .alloyignore file, located inside the root directory.
+    Optional filter to include only certain provided extensions in the consolidated markdown file. If no extensions are
+    provided, all files are considered except files, extensions and directories that are explicitly excluded in the
+    specified .alloyignore file, located inside the root directory.
     """
     if not extensions:
         return True

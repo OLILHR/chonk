@@ -21,7 +21,7 @@ _logger.setLevel(GLOBAL_LOG_LEVEL)
     "extensions",
     callback=parse_extensions,
     multiple=True,
-    help="Filter files by extension, e.g. -f py,json,yml",
+    help="Filter files by extension via an optional '-f' flag, for instance: -f py,json,yml",
 )
 def generate_markdown(path, extensions):
     extensions = list(extensions) if extensions else None
