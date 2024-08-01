@@ -4,6 +4,7 @@ import os
 import click
 
 from alloy.collector import consolidate
+from alloy.filter import parse_extensions
 
 GLOBAL_LOG_LEVEL = logging.INFO
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -14,11 +15,17 @@ _logger.setLevel(GLOBAL_LOG_LEVEL)
 
 @click.command()
 @click.argument("path", type=click.Path(exists=True))
-def main(path):
-    """
-    Generates a consolidated markdown file.
-    """
-    markdown_content = consolidate(path)
+@click.option(
+    "--filter",
+    "-f",
+    "extensions",
+    callback=parse_extensions,
+    multiple=True,
+    help="Filter files by extension via an optional '-f' flag, for instance: -f py,json,yml",
+)
+def generate_markdown(path, extensions):
+    extensions = list(extensions) if extensions else None
+    markdown_content = consolidate(path, extensions)
     project_root = os.path.dirname(os.path.abspath(__file__))
     output_file = os.path.join(project_root, "../codebase.md")
 
@@ -29,4 +36,4 @@ def main(path):
 
 
 if __name__ == "__main__":
-    main()  # pylint: disable=no-value-for-parameter
+    generate_markdown()  # pylint: disable=no-value-for-parameter
