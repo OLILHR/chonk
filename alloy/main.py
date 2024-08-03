@@ -2,7 +2,6 @@ import logging
 import os
 
 import click
-
 from alloy.collector import consolidate
 from alloy.filter import parse_extensions
 
@@ -14,26 +13,38 @@ _logger.setLevel(GLOBAL_LOG_LEVEL)
 
 
 @click.command()
-@click.argument("path", type=click.Path(exists=True))
+@click.argument("input_path", type=click.Path(exists=True), required=False)
 @click.option(
     "--filter",
     "-f",
     "extensions",
     callback=parse_extensions,
     multiple=True,
-    help="Filter files by extension via an optional '-f' flag, for instance: -f py,json,yml",
+    help="OPTIONAL FILTERING BY EXTENSIONS; FOR INSTANCE: -f py,json,yml",  # consolidates only py, json and yml files
 )
-def generate_markdown(path, extensions):
-    extensions = list(extensions) if extensions else None
-    markdown_content = consolidate(path, extensions)
-    project_root = os.path.dirname(os.path.abspath(__file__))
-    output_file = os.path.join(project_root, "../codebase.md")
+def generate_markdown(input_path, extensions):
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    current_dir = os.getcwd()
+
+    if input_path is None:
+        input_path = click.prompt("INPUT PATH:", type=click.Path(exists=True), default=current_dir)
+        output_path = click.prompt("OUTPUT PATH:", type=click.Path(exists=True), default=project_root)
+        extensions_input = click.prompt("FILTER FOR EXTENSIONS:", default="")
+        extensions = parse_extensions(None, None, [extensions_input]) if extensions_input else None
+    else:
+        output_path = project_root
+        extensions = list(extensions) if extensions else None
+
+    input_path = os.path.abspath(os.path.join(current_dir, input_path))
+
+    markdown_content = consolidate(input_path, extensions)
+    output_file = os.path.join(output_path, "codebase.md")
 
     with open(output_file, "w", encoding="utf-8") as f:
         f.write(markdown_content)
 
-    _logger.info("Markdown file generated at %s", output_file)
+    _logger.info("CODEBASE CONSOLIDATED AT %s", output_file)
 
 
 if __name__ == "__main__":
-    generate_markdown()  # pylint: disable=no-value-for-parameter
+    generate_markdown()
