@@ -19,12 +19,14 @@ def read_alloyignore(project_root, extension_filter):
 
     # pylint: disable=too-many-return-statements
     def exclude_files(file_path):
+        file_path = file_path.replace(os.sep, "/")
         if extension_filter:
             _, file_extension = os.path.splitext(file_path)
             if file_extension[1:] in extension_filter:
                 return False
 
         for pattern in ignore_list:
+            pattern = pattern.replace(os.sep, "/")
             if pattern.startswith("/"):  # covers absolute paths from the root
                 if file_path.startswith(pattern[1:]):
                     return True
