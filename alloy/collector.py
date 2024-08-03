@@ -7,12 +7,6 @@ _logger = logging.getLogger(__name__)
 
 
 def consolidate(path, extensions=None):
-    """
-    Consolidates the content of all files from a given directory into a single markdown file. Any files, directories and
-    extensions specified in .alloyignore are excluded. If optional file extensions are provided, only files with these
-    extensions will be included in the consolidated markdown file, regardless of whether they are listed in .alloyignore
-    or not.
-    """
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     exclude_files = read_alloyignore(project_root, extensions)
     codebase = ""
@@ -29,12 +23,16 @@ def consolidate(path, extensions=None):
             _, file_extension = os.path.splitext(file)
 
             try:
-                with open(file_path, "r", encoding="utf-8") as p:
-                    content = p.read().rstrip()
-            except UnicodeDecodeError as e:
-                _logger.error(str(e))
-                continue
+                with open(file_path, "r", encoding="utf-8") as f:
+                    content = f.read()
+            except UnicodeDecodeError:
+                try:
+                    with open(file_path, "r", encoding="iso-8859-1") as f:
+                        content = f.read()
+                except Exception as e:
+                    _logger.warning(f"Unable to read {file_path}: {str(e)}. Skipping this file.")
+                    continue
 
-            codebase += f"\n#### {relative_path}\n\n```{file_extension[1:]}\n{content}\n```\n"
+            codebase += f"\n#### {relative_path}\n\n```{file_extension[1:]}\n{content.rstrip()}\n```\n"
 
     return codebase
