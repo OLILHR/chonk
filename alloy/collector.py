@@ -29,8 +29,8 @@ def consolidate(path, extensions=None):
                 try:
                     with open(file_path, "r", encoding="iso-8859-1") as f:
                         content = f.read()
-                except Exception as e:
-                    _logger.warning(f"Unable to read {file_path}: {str(e)}. Skipping this file.")
+                except (OSError, IOError) as e:
+                    _logger.warning("Unable to read %s: %s. Skipping this file.", file_path, str(e))
                     continue
 
             codebase += f"\n#### {relative_path}\n\n```{file_extension[1:]}\n{content.rstrip()}\n```\n"
