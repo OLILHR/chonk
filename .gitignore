@@ -12,5 +12,6 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
-# alloy output file
+# alloy specific files
+.alloyignore
 codebase.md

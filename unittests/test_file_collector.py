@@ -2,9 +2,10 @@ from alloy.collector import consolidate
 from alloy.filter import read_alloyignore
 
 
-def test_read_alloyignore(unittests_directory, alloyignore_path):
-    exclude = read_alloyignore(unittests_directory["test_data"], [])
-    with open(alloyignore_path, encoding="utf-8") as f:
+def test_read_alloyignore(project_root, mock_alloyignore):
+    exclude = read_alloyignore(project_root, [])
+
+    with open(mock_alloyignore, encoding="utf-8") as f:
         alloyignore = f.read()
 
     assert ".png" in alloyignore
@@ -18,9 +19,10 @@ def test_read_alloyignore(unittests_directory, alloyignore_path):
     assert exclude("test.yml") is False
 
 
-def test_consolidate_excludes_png_and_svg(unittests_directory, alloyignore_path):
-    codebase = consolidate(unittests_directory["test_data"])
-    with open(alloyignore_path, encoding="utf-8") as f:
+def test_consolidate_excludes_png_and_svg(unittests_directory, mock_alloyignore):
+    codebase = consolidate(unittests_directory["mock_data"])
+
+    with open(mock_alloyignore, encoding="utf-8") as f:
         alloyignore = f.read()
 
     assert "dummy_md.md" in codebase
