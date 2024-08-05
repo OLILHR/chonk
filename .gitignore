@@ -14,4 +14,4 @@ Thumbs.db
 
 # alloy specific files
 .alloyignore
-codebase.md
+alloy.md

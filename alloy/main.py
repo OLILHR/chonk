@@ -41,7 +41,7 @@ def generate_markdown(input_path, output_path, extensions):
     extensions = list(extensions) if extensions else None
 
     markdown_content = consolidate(input_path, extensions)
-    output_file = os.path.join(output_path, "codebase.md")
+    output_file = os.path.join(output_path, "alloy.md")
 
     os.makedirs(output_path, exist_ok=True)
 
