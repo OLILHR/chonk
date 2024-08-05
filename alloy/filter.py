@@ -90,12 +90,15 @@ DEFAULT_IGNORE_LIST = [
     ".vscode",
     # python
     "__pycache__",
-    "*.pyc" ".pytest_cache",
-    "py.typed" ".mypy_cache",
+    "*.pyc",
+    ".pytest_cache",
+    "py.typed",
+    ".mypy_cache",
     ".tox",
     # node.js
     "node_modules",
-    "package.json" "package-lock.json",
+    "package.json",
+    "package-lock.json",
     "npm-debug.log",
     # alloy specific files
     ".alloyignore",
