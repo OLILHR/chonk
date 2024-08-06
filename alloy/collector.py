@@ -1,7 +1,7 @@
 import logging
 import os
 
-from alloy.filter import filter_extensions, read_alloyignore
+from .filter import filter_extensions, read_alloyignore
 
 _logger = logging.getLogger(__name__)
 
