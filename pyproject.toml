@@ -1,12 +1,10 @@
 [project]
 name = "alloy"
-description = ""
+description = "codebase consolidation tool"
 license = { text = "GPL-3.0", file = "LICENSE" }
 requires-python = ">=3.12"
 authors = [{ name = "OLILHR" }]
-keywords = [""]
 classifiers = [
-    "Development Status :: 4 - Beta",
     "Environment :: Console",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: GPL-3.0 License",
@@ -16,7 +14,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-    "click"
+    "click",
 ]
 dynamic = ["readme", "version"]
 
@@ -28,28 +26,19 @@ Homepage = "https://github.com/OLILHR/alloy"
 alloy = "alloy.main:generate_markdown"
 
 [build-system]
-requires = ["hatchling>=1.8.0", "hatch-vcs", "hatch-fancy-pypi-readme"]
-build-backend = "hatchling.build"
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
 
-[tool.hatch.metadata.hooks.fancy-pypi-readme]
+[tool.pdm]
+version = { source = "scm" }
+
+[tool.pdm.build]
+includes = ["alloy"]
+excludes = ["/unittests"]
+
+[tool.pdm.readme]
 content-type = "text/markdown"
-fragments = [{ path = "README.md" }]
-
-[tool.hatch.version]
-source = "vcs"
-
-[tool.hatch.build.hooks.vcs]
-version-file = "alloy/_version.py"
-template = '''
-VERSION = "{version}"
-'''
-
-[tool.hatch.build.targets.sdist]
-exclude = ["/unittests"]
-
-[tool.hatch.build.targets.wheel]
-only-include = ["alloy"]
-sources = ["alloy"]
+path = "README.md"
 
 [tool.black]
 line-length = 120
