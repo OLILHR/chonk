@@ -1,4 +1,4 @@
-name: "Packaging Test"
+name: "Packaging"
 
 on: [pull_request]
 
@@ -35,4 +35,4 @@ jobs:
 
       - name: Run packaging test
         run: |
-          tox -e test_packaging
+          tox -e packaging
