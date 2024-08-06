@@ -16,7 +16,8 @@ classifiers = [
 dependencies = [
     "click",
 ]
-dynamic = ["readme", "version"]
+dynamic = ["version"]
+readme = "README.md"
 
 [project.urls]
 Changelog = "https://github.com/OLILHR/alloy/releases"

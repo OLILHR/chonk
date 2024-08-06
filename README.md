@@ -10,9 +10,3 @@ CLI tool designed to consolidate codebases into a single markdown file.
 ![Formatting status badge](https://github.com/OLILHR/alloy/workflows/Formatting/badge.svg)
 
 </div>
-
-### Installation
-
-```sh
-pip install
-```
