@@ -29,8 +29,8 @@ alloy = "alloy.main:generate_markdown"
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
-[tool.pdm]
-version = { source = "scm" }
+[tool.pdm.version]
+source = "scm"
 
 [tool.pdm.build]
 includes = ["alloy"]
