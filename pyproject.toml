@@ -15,8 +15,15 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.12",
 ]
-dependencies = []
+dependencies = ["click"]
 dynamic = ["readme", "version"]
+
+[build-system]
+requires = ["hatchling>=1.8.0", "hatch-vcs", "hatch-fancy-pypi-readme"]
+build-backend = "hatchling.build"
+
+[project.scripts]
+alloy = "alloy.main:generate_markdown"
 
 [project.urls]
 Changelog = "https://github.com/OLILHR/alloy/releases"
@@ -29,6 +36,41 @@ line-length = 120
 line_length = 120
 profile = "black"
 
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+fragments = [{ path = "README.md" }]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "alloy/_version.py"
+template = '''
+version = "{version}"
+'''
+
+[tool.hatch.build.targets.sdist]
+exclude = ["/unittests"]
+
+[tool.hatch.build.targets.wheel]
+only-include = ["alloy"]
+sources = ["alloy"]
+
+[tool.hatch.envs.default]
+dependencies = [
+  "pytest",
+  "pylint",
+  "black",
+  "isort",
+  "mypy",
+]
+
+[mypy]
+truethy-bool = true
+
+[tool.mypy]
+disable_error_code = ["no-untyped-def", "no-untyped-call"]
+
 [tool.pylint.format]
 max-line-length = 120
 
@@ -38,9 +80,3 @@ disable = [
     "fixme",
     "missing-docstring"
 ]
-
-[mypy]
-truethy-bool = true
-
-[tool.mypy]
-disable_error_code = ["no-untyped-def", "no-untyped-call"]
