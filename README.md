@@ -1,8 +1,8 @@
 <div align="center">
 
-# alloy
+<img width="70%" src="alloy.svg" alt="alloy">
 
-CLI tool designed to consolidate codebases into a single markdown file.
+**CLI tool to consolidate codebases into single markdown files.**
 
 ![Unittests status badge](https://github.com/OLILHR/alloy/workflows/Unittests/badge.svg)
 ![Coverage status badge](https://github.com/OLILHR/alloy/workflows/Coverage/badge.svg)
