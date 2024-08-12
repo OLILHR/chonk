@@ -1,6 +1,6 @@
 <div align="center">
 
-<img width="70%" src="alloy.svg" alt="alloy">
+<img width="65%" src="alloy.svg" alt="alloy">
 
 **CLI tool to consolidate codebases into single markdown files.**
 
