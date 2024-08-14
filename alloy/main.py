@@ -3,8 +3,8 @@ import os
 
 import click
 
-from alloy.collector import consolidate
-from alloy.filter import parse_extensions
+from .collector import consolidate
+from .filter import parse_extensions
 
 GLOBAL_LOG_LEVEL = logging.INFO
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -14,8 +14,8 @@ _logger.setLevel(GLOBAL_LOG_LEVEL)
 
 
 @click.command()
-@click.option("-i", "--input-path", type=click.Path(exists=True), help="Input path for the codebase")
-@click.option("-o", "--output-path", type=click.Path(), help="Output path for the generated markdown")
+@click.option("-i", "--input-path", type=click.Path(exists=True), help="INPUT PATH FOR THE FILES TO BE CONSOLIDATED.")
+@click.option("-o", "--output-path", type=click.Path(), help="OUTPUT PATH FOR THE GENERATED MARKDOWN FILE.")
 @click.option(
     "--filter",
     "-f",
@@ -24,6 +24,7 @@ _logger.setLevel(GLOBAL_LOG_LEVEL)
     multiple=True,
     help="OPTIONAL FILTERING BY EXTENSIONS; FOR INSTANCE: -f py,json",  # consolidates only .py and .json files
 )
+@click.pass_context
 def generate_markdown(input_path, output_path, extensions):
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     current_dir = os.getcwd()
