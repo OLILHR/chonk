@@ -8,7 +8,6 @@ _logger = logging.getLogger(__name__)
 
 
 def escape_markdown_characters(file_name):
-    """Escape special Markdown characters in the given text."""
     special_chars = r"([*_`\[\]()~>#+=|{}.!-])"
     return re.sub(special_chars, r"\\\1", file_name)
 

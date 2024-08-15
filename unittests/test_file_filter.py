@@ -1,4 +1,7 @@
-from alloy.collector import consolidate
+import os
+import re
+
+from alloy.collector import consolidate, escape_markdown_characters
 
 
 def test_consolidate_specified_filter_extensions(unittests_directory, mock_alloyignore):
@@ -7,15 +10,21 @@ def test_consolidate_specified_filter_extensions(unittests_directory, mock_alloy
         alloyignore = f.read()
 
     assert not any(ext in alloyignore for ext in [".md", ".txt", ".py", ".yml"])
-    assert "dummy_md.md" in filtered_codebase
-    assert "dummy_txt.txt" in filtered_codebase
-    assert "dummy_py.py" not in filtered_codebase
-    assert "dummy_yml.yml" not in filtered_codebase
+    assert re.search(rf"#### {re.escape(escape_markdown_characters('dummy_md.md'))}", filtered_codebase)
+    assert re.search(rf"#### {re.escape(escape_markdown_characters('dummy_txt.txt'))}", filtered_codebase)
+    assert not re.search(rf"#### {re.escape(escape_markdown_characters('dummy_py.py'))}", filtered_codebase)
+    assert not re.search(
+        rf"#### {re.escape(escape_markdown_characters(os.path.join('dummy_subdirectory', 'dummy_yml.yml')))}",
+        filtered_codebase,
+    )
 
     assert ".png" in alloyignore
-    assert "dummy_png.png" not in filtered_codebase
+    assert not re.search(rf"#### {re.escape(escape_markdown_characters('dummy_png.png'))}", filtered_codebase)
     assert ".svg" in alloyignore
-    assert "dummy_svg.svg" not in filtered_codebase
+    assert not re.search(
+        rf"#### {re.escape(escape_markdown_characters(os.path.join('dummy_subdirectory', 'dummy_svg.svg')))}",
+        filtered_codebase,
+    )
 
 
 def test_extension_filter_bypasses_alloyignore(unittests_directory, mock_alloyignore):
@@ -24,10 +33,16 @@ def test_extension_filter_bypasses_alloyignore(unittests_directory, mock_alloyig
         alloyignore = f.read()
 
     assert ".svg" in alloyignore
-    assert "dummy_svg.svg" in filtered_codebase
+    assert re.search(
+        rf"#### {re.escape(escape_markdown_characters(os.path.join('dummy_subdirectory', 'dummy_svg.svg')))}",
+        filtered_codebase,
+    )
 
-    assert "dummy_md.md" not in filtered_codebase
-    assert "dummy_txt.txt" not in filtered_codebase
-    assert "dummy_py.py" not in filtered_codebase
-    assert "dummy_yml.yml" not in filtered_codebase
-    assert "dummy_png.png" not in filtered_codebase
+    assert not re.search(rf"#### {re.escape(escape_markdown_characters('dummy_md.md'))}", filtered_codebase)
+    assert not re.search(rf"#### {re.escape(escape_markdown_characters('dummy_txt.txt'))}", filtered_codebase)
+    assert not re.search(rf"#### {re.escape(escape_markdown_characters('dummy_py.py'))}", filtered_codebase)
+    assert not re.search(
+        rf"#### {re.escape(escape_markdown_characters(os.path.join('dummy_subdirectory', 'dummy_yml.yml')))}",
+        filtered_codebase,
+    )
+    assert not re.search(rf"#### {re.escape(escape_markdown_characters('dummy_png.png'))}", filtered_codebase)
