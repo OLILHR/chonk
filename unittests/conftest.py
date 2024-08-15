@@ -1,3 +1,4 @@
+import io
 import os
 
 import pytest
@@ -9,25 +10,45 @@ def project_root():
 
 
 @pytest.fixture(scope="session")
-def unittests_directory(project_root):
-    return {
-        "mock_data": os.path.join(project_root, "unittests", "data"),
+def mock_project_structure():
+    files = {
+        "markdown.md": "# markdown content",
+        "python.py": 'print("python content")',
+        "text.txt": "text content",
+        "image.png": "<image content>",
+        "dummy_directory/markup.yml": "key: value",
+        "dummy_directory/vector.svg": "<svg></svg>",
     }
+    return files
 
 
 @pytest.fixture(scope="function")
-def mock_alloyignore(monkeypatch, project_root):
-    """
-    Ensures unittests use the .alloyignore.mock file and returns its path.
-    """
-    mock_alloyignore_path = os.path.join(project_root, ".alloyignore.mock")
-    original_join = os.path.join
+def mock_alloyignore():
+    return ".png\n.svg\n"
 
-    def mock_join(*args):
-        if args[-1] == ".alloyignore":
-            return mock_alloyignore_path
-        return original_join(*args)
 
-    monkeypatch.setattr(os.path, "join", mock_join)
+@pytest.fixture(scope="function")
+def mock_open(mock_project_structure):
+    def _mock_open(file, mode="r", encoding=None):
+        if file in mock_project_structure:
+            return io.StringIO(mock_project_structure[file])
+        raise FileNotFoundError(f"Mock file not found: {file}")
 
-    return mock_alloyignore_path
+    return _mock_open
+
+
+@pytest.fixture(scope="function")
+def mock_os_walk(mock_project_structure):
+    def _mock_walk(top, topdown=True, onerror=None, followlinks=False):
+        yield "", ["dummy_directory"], [f for f in mock_project_structure if "/" not in f]
+        yield "dummy_directory", [], [f.split("/")[-1] for f in mock_project_structure if "/" in f]
+
+    return _mock_walk
+
+
+@pytest.fixture(scope="function")
+def patch_file_operations(monkeypatch, mock_open, mock_os_walk, mock_alloyignore, mock_project_structure):
+    monkeypatch.setattr("builtins.open", mock_open)
+    monkeypatch.setattr("os.walk", mock_os_walk)
+    monkeypatch.setattr("os.path.exists", lambda path: path == ".alloyignore" or path in mock_project_structure)
+    return mock_alloyignore
