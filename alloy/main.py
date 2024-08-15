@@ -2,6 +2,8 @@ import logging
 import os
 
 import click
+from prompt_toolkit import prompt
+from prompt_toolkit.completion import PathCompleter
 
 from .collector import consolidate
 from .filter import parse_extensions
@@ -13,6 +15,21 @@ _logger = logging.getLogger(__name__)
 _logger.setLevel(GLOBAL_LOG_LEVEL)
 
 MAX_FILE_SIZE = 1024 * 1024 * 10  # 10 MB
+
+
+def path_prompt(message, default, exists=False):
+
+    completer = PathCompleter(only_directories=False, expanduser=True)
+
+    if not default.endswith(os.path.sep):
+        default += os.path.sep
+
+    while True:
+        path = prompt(f"{message} ", default=default, completer=completer)
+        path = os.path.abspath(os.path.expanduser(path))
+        if not exists or os.path.exists(path):
+            return path
+        print(f"🔴 {path} DOES NOT EXIST.")
 
 
 @click.command()
@@ -31,23 +48,19 @@ def generate_markdown(input_path, output_path, extension_filter):
     current_dir = os.getcwd()
 
     if input_path is None:
-        input_path = click.prompt(
-            "📁 INPUT PATH OF YOUR TARGET DIRECTORY -", type=click.Path(exists=True), default=current_dir
-        )
+        input_path = path_prompt("📁 INPUT PATH OF YOUR TARGET DIRECTORY -", default=current_dir, exists=True)
     else:
         input_path = os.path.abspath(os.path.join(current_dir, input_path))
 
     if output_path is None:
-        output_path = click.prompt(
-            "📁 OUTPUT PATH FOR THE MARKDOWN FILE -", type=click.Path(), default=project_root
-        )
+        output_path = path_prompt("📁 OUTPUT PATH FOR THE MARKDOWN FILE -", default=project_root)
     else:
         output_path = os.path.abspath(os.path.join(current_dir, output_path))
 
     extensions = extension_filter
     if not extensions:
         extensions_input = click.prompt(
-            "🔎 (OPTIONAL) FILTER ONLY FOR SPECIFIC EXTENSIONS (COMMA-SEPARATED)",
+            "🔎 (OPTIONAL) FILTER FOR SPECIFIC EXTENSIONS (COMMA-SEPARATED)",
             default="",
             show_default=False,
         )
