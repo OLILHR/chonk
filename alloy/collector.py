@@ -9,10 +9,11 @@ _logger = logging.getLogger(__name__)
 
 def escape_markdown_characters(file_name):
     """Escape special Markdown characters in the given text."""
-    special_chars = r'([*_`\[\]()~>#+=|{}.!-])'
-    return re.sub(special_chars, r'\\\1', file_name)
+    special_chars = r"([*_`\[\]()~>#+=|{}.!-])"
+    return re.sub(special_chars, r"\\\1", file_name)
 
 
+# pylint: disable=too-many-locals
 def consolidate(path, extensions=None):
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     exclude_files = read_alloyignore(project_root, extensions)
