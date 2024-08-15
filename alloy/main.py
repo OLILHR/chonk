@@ -24,7 +24,6 @@ _logger.setLevel(GLOBAL_LOG_LEVEL)
     multiple=True,
     help="OPTIONAL FILTERING BY EXTENSIONS; FOR INSTANCE: -f py,json",  # consolidates only .py and .json files
 )
-@click.pass_context
 def generate_markdown(input_path, output_path, extensions):
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     current_dir = os.getcwd()
@@ -53,4 +52,4 @@ def generate_markdown(input_path, output_path, extensions):
 
 
 if __name__ == "__main__":
-    generate_markdown.main()
+    generate_markdown()
