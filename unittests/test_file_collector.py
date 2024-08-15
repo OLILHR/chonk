@@ -36,7 +36,7 @@ def test_consolidate_excludes_png_files(unittests_directory, mock_alloyignore):
     assert not re.search(rf"#### {re.escape(escape_markdown_characters('dummy_png.png'))}", codebase)
 
 
-def test_consolidate_considers_subdirectories(unittests_directory, mock_alloyignore):
+def test_consolidate_considers_subdirectories(unittests_directory):
     codebase = consolidate(unittests_directory["mock_data"])
 
     assert re.search(rf"#### {re.escape(escape_markdown_characters('dummy_md.md'))}", codebase)

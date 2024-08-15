@@ -63,4 +63,4 @@ def generate_markdown(input_path, output_path, extensions):
 
 # execute via "python -m alloy"
 if __name__ == "__main__":
-    generate_markdown()
+    generate_markdown.main()

@@ -7,6 +7,12 @@ from .filter import filter_extensions, read_alloyignore
 _logger = logging.getLogger(__name__)
 
 
+def remove_trailing_whitespace(content):
+    content = re.sub(r'\n{3,}', '\n\n', content)
+    content = re.sub(r' +$', '', content, flags=re.MULTILINE)
+    return content
+
+
 def escape_markdown_characters(file_name):
     special_chars = r"([*_`\[\]()~>#+=|{}.!-])"
     return re.sub(special_chars, r"\\\1", file_name)
@@ -42,5 +48,7 @@ def consolidate(path, extensions=None):
 
             escaped_relative_path = escape_markdown_characters(relative_path)
             codebase += f"\n#### {escaped_relative_path}\n\n```{file_extension[1:]}\n{content.rstrip()}\n```\n"
+
+    codebase = remove_trailing_whitespace(codebase)
 
     return codebase
