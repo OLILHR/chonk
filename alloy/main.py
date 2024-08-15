@@ -48,7 +48,7 @@ def generate_markdown(input_path, output_path, extensions):
     with open(output_file, "w", encoding="utf-8") as f:
         f.write(markdown_content)
 
-    _logger.info("CODEBASE CONSOLIDATED AT %s", output_file)
+    _logger.info("\n\n" + "CODEBASE CONSOLIDATED SUCCESSFULLY 🟢\n" + "OUTPUT PATH: %s" + "\n", output_file)
 
 
 if __name__ == "__main__":
