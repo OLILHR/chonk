@@ -33,6 +33,7 @@ tox.ini
 package.json
 package-lock.json
 
+dev_requirements/
 requirements.in
 requirements.txt
 
