@@ -8,8 +8,8 @@ _logger = logging.getLogger(__name__)
 
 
 def remove_trailing_whitespace(content):
-    content = re.sub(r'\n{3,}', '\n\n', content)
-    content = re.sub(r' +$', '', content, flags=re.MULTILINE)
+    content = re.sub(r"\n{3,}", "\n\n", content)
+    content = re.sub(r" +$", "", content, flags=re.MULTILINE)
     return content
 
 
