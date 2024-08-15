@@ -7,7 +7,7 @@ from .collector import consolidate
 from .filter import parse_extensions
 
 GLOBAL_LOG_LEVEL = logging.INFO
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logging.basicConfig(level=logging.INFO, format="%(message)s")
 
 _logger = logging.getLogger(__name__)
 _logger.setLevel(GLOBAL_LOG_LEVEL)
@@ -48,7 +48,7 @@ def generate_markdown(input_path, output_path, extensions):
     with open(output_file, "w", encoding="utf-8") as f:
         f.write(markdown_content)
 
-    _logger.info("\n\n" + "CODEBASE CONSOLIDATED SUCCESSFULLY 🟢\n" + "OUTPUT PATH: %s" + "\n", output_file)
+    _logger.info("\n" + "CODEBASE CONSOLIDATED SUCCESSFULLY 🟢\n" + "MARKDOWN FILE LOCATION: %s" + "\n", output_file)
 
 
 if __name__ == "__main__":
