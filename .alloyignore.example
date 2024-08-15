@@ -11,3 +11,48 @@
 
 .env
 .env.*
+*.env
+
+.github/
+.gitignore
+.gitattributes
+.gitmodules
+
+htmlcov/
+
+.pdm-build/
+pdm.lock
+__pycache__
+*.pyc
+.pytest_cache
+py.typed
+.mypy_cache
+.tox/
+tox.ini
+
+package.json
+package-lock.json
+
+requirements.in
+requirements.txt
+
+LICENSE
+README.md
+
+# DEFAULT_IGNORE_LIST = [
+#     ".cache/",
+#     ".coverage",
+#     "dist/",
+#     ".DS_Store",
+#     ".git",
+#     ".idea",
+#     "Thumbs.db",
+#     ".venv/",
+#     ".vscode/",
+#
+#     "node_modules/",
+#
+#     ".alloyignore",
+#     ".alloy.example",
+#     "alloy.md",
+# ]

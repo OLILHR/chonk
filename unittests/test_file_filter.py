@@ -4,11 +4,12 @@ import re
 from alloy.collector import consolidate, escape_markdown_characters
 
 
-# pylint: disable=unused-argument
-def test_consolidate_specified_filter_extensions(project_root, mock_project, mock_operations, mock_alloyignore):
+def test_consolidate_specified_filter_extensions(
+    project_root, mock_project, mock_operations, mock_alloyignore
+):  # pylint: disable=unused-argument
     filtered_codebase = consolidate(project_root, extensions=["md", "txt"])
 
-    assert not any(ext in mock_alloyignore for ext in [".md", ".txt", ".py", ".yml"])
+    assert not any(extension in mock_alloyignore for extension in [".md", ".txt", ".py", ".yml"])
     assert re.search(rf"#### {re.escape(escape_markdown_characters('markdown.md'))}", filtered_codebase)
     assert re.search(rf"#### {re.escape(escape_markdown_characters('text.txt'))}", filtered_codebase)
     assert not re.search(rf"#### {re.escape(escape_markdown_characters('python.py'))}", filtered_codebase)
@@ -26,8 +27,9 @@ def test_consolidate_specified_filter_extensions(project_root, mock_project, moc
     )
 
 
-# pylint: disable=unused-argument
-def test_extension_filter_bypasses_alloyignore(project_root, mock_project, mock_operations, mock_alloyignore):
+def test_extension_filter_bypasses_alloyignore(
+    project_root, mock_project, mock_operations, mock_alloyignore
+):  # pylint: disable=unused-argument
     filtered_codebase = consolidate(project_root, extensions=["svg"])
 
     assert ".svg" in mock_alloyignore
