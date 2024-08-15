@@ -18,9 +18,13 @@ MAX_FILE_SIZE = 1024 * 1024 * 10  # 10 MB
 
 
 def path_prompt(message, default, exists=False):
+    """
+    Provides basic shell features, like autocompletion, during prompts.
+    """
 
     completer = PathCompleter(only_directories=False, expanduser=True)
 
+    # Adding a path separator to the end of the prompted path by default
     if not default.endswith(os.path.sep):
         default += os.path.sep
 
@@ -68,7 +72,6 @@ def generate_markdown(input_path, output_path, extension_filter):
             extensions = parse_extensions(None, None, [extensions_input])
 
     extensions = list(extensions) if extensions else None
-
     markdown_content = consolidate(input_path, extensions)
 
     if len(markdown_content.encode("utf-8")) > MAX_FILE_SIZE:
