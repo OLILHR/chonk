@@ -49,7 +49,7 @@ def generate_markdown(input_path, output_path, extensions):
     markdown_content = consolidate(input_path, extensions)
 
     if len(markdown_content.encode("utf-8")) > MAX_FILE_SIZE:
-        _logger.error("🔴 GENERATED CONTENT EXCEEDS 10 MB. CONSIDER ADDING LARGER FILES TO YOUR .alloyignore.")
+        _logger.error("\n" + "🔴 GENERATED CONTENT EXCEEDS 10 MB. CONSIDER ADDING LARGER FILES TO YOUR .alloyignore.")
         return
 
     output_file = os.path.join(output_path, "alloy.md")
@@ -58,7 +58,7 @@ def generate_markdown(input_path, output_path, extensions):
     with open(output_file, "w", encoding="utf-8") as f:
         f.write(markdown_content)
 
-    _logger.info("\n" + "CODEBASE CONSOLIDATED SUCCESSFULLY 🟢\n" + "MARKDOWN FILE LOCATION: %s" + "\n", output_file)
+    _logger.info("\n" + "🟢 CODEBASE CONSOLIDATED SUCCESSFULLY\n" + "📁 MARKDOWN FILE LOCATION: %s" + "\n", output_file)
 
 
 # execute via "python -m alloy"
