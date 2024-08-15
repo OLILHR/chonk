@@ -6,6 +6,7 @@
 .pdm-build/
 .pytest_cache/
 .tox/
+.venv
 __pycache__/
 htmlcov/
 

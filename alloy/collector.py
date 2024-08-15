@@ -1,11 +1,24 @@
 import logging
 import os
+import re
 
 from .filter import filter_extensions, read_alloyignore
 
 _logger = logging.getLogger(__name__)
 
 
+def remove_trailing_whitespace(content):
+    content = re.sub(r"\n{3,}", "\n\n", content)
+    content = re.sub(r" +$", "", content, flags=re.MULTILINE)
+    return content
+
+
+def escape_markdown_characters(file_name):
+    special_chars = r"([*_`\[\]()~>#+=|{}.!-])"
+    return re.sub(special_chars, r"\\\1", file_name)
+
+
+# pylint: disable=too-many-locals
 def consolidate(path, extensions=None):
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     exclude_files = read_alloyignore(project_root, extensions)
@@ -33,6 +46,9 @@ def consolidate(path, extensions=None):
                     _logger.warning("Unable to read %s: %s. Skipping this file.", file_path, str(e))
                     continue
 
-            codebase += f"\n#### {relative_path}\n\n```{file_extension[1:]}\n{content.rstrip()}\n```\n"
+            escaped_relative_path = escape_markdown_characters(relative_path)
+            codebase += f"\n#### {escaped_relative_path}\n\n```{file_extension[1:]}\n{content.rstrip()}\n```\n"
+
+    codebase = remove_trailing_whitespace(codebase)
 
     return codebase
