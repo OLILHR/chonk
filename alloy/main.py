@@ -45,7 +45,7 @@ def path_prompt(message, default, exists=False):
     "extension_filter",
     callback=parse_extensions,
     multiple=True,
-    help="enables optional filtering by extensions, for instance: -f py,json",  # consolidates only .py and .json files
+    help="enables optional filtering by extensions, for instance: -f py,json",  # markdown contains only .py/.json files
 )
 def generate_markdown(input_path, output_path, extension_filter):
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
