@@ -5,8 +5,7 @@ from alloy.collector import consolidate, escape_markdown_characters, remove_trai
 from alloy.filter import read_alloyignore
 
 
-# pylint: disable=unused-argument
-def test_read_alloyignore(project_root, mock_operations):
+def test_read_alloyignore(project_root, mock_operations):  # pylint: disable=unused-argument
 
     exclude = read_alloyignore(project_root, [])
 
@@ -30,8 +29,7 @@ def test_consolidate_removes_trailing_whitespace():
     assert not re.search(r" +$", output, re.MULTILINE)
 
 
-# pylint: disable=unused-argument
-def test_consolidate_excludes_png_files(project_root, mock_project, mock_operations):
+def test_consolidate_excludes_png_files(project_root, mock_project, mock_operations):  # pylint: disable=unused-argument
     codebase = consolidate(project_root)
 
     assert ".png" in mock_project[os.path.join(project_root, ".alloyignore")]

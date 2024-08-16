@@ -72,35 +72,18 @@ def parse_extensions(_csx, _param, value):
 
 
 DEFAULT_IGNORE_LIST = [
-    ".cache",
+    ".cache/",
     ".coverage",
-    "dist",
+    "dist/",
     ".DS_Store",
-    ".env",
-    "*.env",
-    ".env.*",
     ".git",
-    ".github",
-    ".gitignore",
-    ".gitattributes",
-    ".gitmodules",
     ".idea",
     "Thumbs.db",
-    ".venv",
-    ".vscode",
-    # python
-    "__pycache__",
-    "*.pyc",
-    ".pytest_cache",
-    "py.typed",
-    ".mypy_cache",
-    ".tox",
-    # node.js
-    "node_modules",
-    "package.json",
-    "package-lock.json",
-    "npm-debug.log",
-    # alloy specific files
+    ".venv/",
+    ".vscode/",
+    "node_modules/",
+    # alloy-specific files
     ".alloyignore",
+    ".alloy.example",
     "alloy.md",
 ]
