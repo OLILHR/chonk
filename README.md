@@ -2,7 +2,7 @@
 
 <img width="65%" src="alloy.svg" alt="alloy">
 
-**CLI tool to consolidate codebases into single markdown files.**
+**codebase consolidation tool.**
 
 ![PyPi Status Badge](https://img.shields.io/pypi/v/alloy)
 ![Unittests status badge](https://github.com/OLILHR/alloy/workflows/Unittests/badge.svg)
