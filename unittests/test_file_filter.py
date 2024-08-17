@@ -7,7 +7,7 @@ from alloy.collector import consolidate, escape_markdown_characters
 def test_consolidate_specified_filter_extensions(
     project_root, mock_project, mock_operations, mock_alloyignore
 ):  # pylint: disable=unused-argument
-    filtered_codebase = consolidate(project_root, extensions=["md", "txt"])
+    filtered_codebase, _ = consolidate(project_root, extensions=["md", "txt"])
 
     assert not any(extension in mock_alloyignore for extension in [".md", ".txt", ".py", ".yml"])
     assert re.search(rf"#### {re.escape(escape_markdown_characters('markdown.md'))}", filtered_codebase)
@@ -30,7 +30,7 @@ def test_consolidate_specified_filter_extensions(
 def test_extension_filter_bypasses_alloyignore(
     project_root, mock_project, mock_operations, mock_alloyignore
 ):  # pylint: disable=unused-argument
-    filtered_codebase = consolidate(project_root, extensions=["svg"])
+    filtered_codebase, _ = consolidate(project_root, extensions=["svg"])
 
     assert ".svg" in mock_alloyignore
     assert re.search(

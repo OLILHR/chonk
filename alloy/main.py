@@ -71,7 +71,7 @@ def generate_markdown(input_path, output_path, extension_filter):
             extensions = parse_extensions(None, None, [extensions_input])
 
     extensions = list(extensions) if extensions else None
-    markdown_content = consolidate(input_path, extensions)
+    markdown_content, file_count = consolidate(input_path, extensions)
 
     if len(markdown_content.encode("utf-8")) > MAX_FILE_SIZE:
         _logger.error("\n" + "🔴 GENERATED CONTENT EXCEEDS 10 MB. CONSIDER ADDING LARGER FILES TO YOUR .alloyignore.")
@@ -85,11 +85,11 @@ def generate_markdown(input_path, output_path, extension_filter):
 
     output_file_size = os.path.getsize(output_file)
     if output_file_size < 1024:
-        size = f"{output_file_size} bytes"
+        file_size = f"{output_file_size} bytes"
     elif output_file_size < 1024 * 1024:
-        size = f"{output_file_size / 1024:.2f} KB"
+        file_size = f"{output_file_size / 1024:.2f} KB"
     else:
-        size = f"{output_file_size / (1024 * 1024):.2f} MB"
+        file_size = f"{output_file_size / (1024 * 1024):.2f} MB"
 
     _logger.info(
         "\n"
@@ -97,11 +97,14 @@ def generate_markdown(input_path, output_path, extension_filter):
         + "\n"
         + "📁 MARKDOWN FILE LOCATION: %s"
         + "\n"
-        + "💾 FILE SIZE: %s"
+        + "💾 MARKDOWN FILE SIZE: %s"
+        + "\n"
+        + "📄 FILES PROCESSED: %d"
         + "\n"
         + "\n",
         output_file,
-        size,
+        file_size,
+        file_count,
     )
 
 

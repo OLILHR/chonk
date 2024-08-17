@@ -23,6 +23,7 @@ def consolidate(path, extensions=None):
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     exclude_files = read_alloyignore(project_root, extensions)
     codebase = ""
+    file_count = 0
 
     for root, dirs, files in os.walk(path):
         dirs[:] = [d for d in dirs if not exclude_files(os.path.relpath(str(os.path.join(root, d)), path))]
@@ -48,7 +49,8 @@ def consolidate(path, extensions=None):
 
             escaped_relative_path = escape_markdown_characters(relative_path)
             codebase += f"\n#### {escaped_relative_path}\n\n```{file_extension[1:]}\n{content.rstrip()}\n```\n"
+            file_count += 1
 
     codebase = remove_trailing_whitespace(codebase)
 
-    return codebase
+    return codebase, file_count

@@ -30,7 +30,7 @@ def test_consolidate_removes_trailing_whitespace():
 
 
 def test_consolidate_excludes_png_files(project_root, mock_project, mock_operations):  # pylint: disable=unused-argument
-    codebase = consolidate(project_root)
+    codebase, _ = consolidate(project_root)
 
     assert ".png" in mock_project[os.path.join(project_root, ".alloyignore")]
     assert not re.search(rf"#### {re.escape(escape_markdown_characters('image.png'))}", codebase)
@@ -39,7 +39,7 @@ def test_consolidate_excludes_png_files(project_root, mock_project, mock_operati
 def test_consolidate_considers_subdirectories(
     project_root, mock_project, mock_operations
 ):  # pylint: disable=unused-argument
-    codebase = consolidate(project_root)
+    codebase, _ = consolidate(project_root)
 
     print(f"Mock project structure: {mock_project}")
     print(f"Consolidated codebase:\n{codebase}")
