@@ -2,6 +2,7 @@ import os
 import re
 
 from alloy.collector import consolidate, escape_markdown_characters
+from alloy.filter import filter_extensions, parse_extensions
 
 
 def test_consolidate_only_specified_filters(
@@ -47,3 +48,18 @@ def test_extension_filter_bypasses_alloyignore(
         filtered_codebase,
     )
     assert not re.search(rf"#### {re.escape(escape_markdown_characters('image.png'))}", filtered_codebase)
+
+
+def test_filter_extensions_edge_cases():
+    assert filter_extensions("test.py", []) is True
+    assert filter_extensions("test.py", None) is True
+    assert filter_extensions("test.py", ["py"]) is True
+
+    assert filter_extensions("test", ["py"]) is False
+    assert filter_extensions(".gitignore", ["py"]) is False
+
+
+def test_parse_extensions_edge_cases():
+    assert parse_extensions(None, None, "") is None
+    assert parse_extensions(None, None, ["py, js, css"]) == ["py", "js", "css"]
+    assert parse_extensions(None, None, ["py", "js", "css"]) == ["py", "js", "css"]

@@ -4,17 +4,6 @@ import re
 from alloy.collector import consolidate, escape_markdown_characters, remove_trailing_whitespace
 
 
-def test_consolidate_removes_trailing_whitespace():
-    input_content = "trailing whitespace         "
-    expected_output = "trailing whitespace"
-
-    output = remove_trailing_whitespace(input_content)
-
-    assert output == expected_output
-    assert not re.search(r"\n{3,}", output)
-    assert not re.search(r" +$", output, re.MULTILINE)
-
-
 def test_consolidate_excludes_ignored_files(
     project_root, mock_project, mock_operations
 ):  # pylint: disable=unused-argument
@@ -76,3 +65,24 @@ def test_consolidate_file_token_count(project_root, mock_project, mock_operation
             escaped_path = escape_markdown_characters(os.path.relpath(file_path, project_root))
             assert re.search(rf"#### {re.escape(escaped_path)}", codebase)
             assert content in codebase
+
+
+def test_consolidate_removes_trailing_whitespace():
+    input_content = "trailing whitespace         "
+    expected_output = "trailing whitespace"
+
+    output = remove_trailing_whitespace(input_content)
+
+    assert output == expected_output
+    assert not re.search(r"\n{3,}", output)
+    assert not re.search(r" +$", output, re.MULTILINE)
+
+
+def test_remove_trailing_whitespace_multiple_newlines():
+    input_content = "test\n\n\n\ntest\n\n\n"
+    expected_output = "test\n\ntest\n\n"
+    assert remove_trailing_whitespace(input_content) == expected_output
+
+
+def test_escape_markdown_characters():
+    assert escape_markdown_characters("__init__.py") == "\\_\\_init\\_\\_\\.py"
