@@ -2,20 +2,6 @@ import os
 import re
 
 from alloy.collector import consolidate, escape_markdown_characters, remove_trailing_whitespace
-from alloy.filter import read_alloyignore
-
-
-def test_read_alloyignore(project_root, mock_operations):  # pylint: disable=unused-argument
-
-    exclude = read_alloyignore(project_root, [])
-
-    assert exclude("test.png") is True
-    assert exclude("test.svg") is True
-
-    assert exclude("test.md") is False
-    assert exclude("test.txt") is False
-    assert exclude("test.py") is False
-    assert exclude("test.yml") is False
 
 
 def test_consolidate_removes_trailing_whitespace():

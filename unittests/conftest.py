@@ -11,8 +11,19 @@ def project_root():
 
 
 @pytest.fixture(scope="function")
-def mock_alloyignore():
-    return ".png\n.svg\n"
+def mock_alloyignore_content():
+    return [
+        ".png",
+        ".svg",
+        "*.log",
+        "/node_modules/",
+        # comment
+    ]
+
+
+@pytest.fixture(scope="function")
+def mock_alloyignore(mock_alloyignore_content):
+    return "\n".join(mock_alloyignore_content) + "\n"
 
 
 @pytest.fixture(scope="function")
