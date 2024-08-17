@@ -24,7 +24,6 @@ def path_prompt(message, default, exists=False):
 
     completer = PathCompleter(only_directories=False, expanduser=True)
 
-    # Adding a path separator to the end of the prompted path by default
     if not default.endswith(os.path.sep):
         default += os.path.sep
 
@@ -62,7 +61,7 @@ def generate_markdown(input_path, output_path, extension_filter):
         output_path = os.path.abspath(os.path.join(current_dir, output_path))
 
     extensions = extension_filter
-    if not extensions:
+    if not extensions and input_path is None and output_path is None:
         extensions_input = click.prompt(
             "🔎 (OPTIONAL) FILTER FOR SPECIFIC EXTENSIONS (COMMA-SEPARATED)",
             default="",
@@ -87,6 +86,5 @@ def generate_markdown(input_path, output_path, extension_filter):
     _logger.info("\n" + "🟢 CODEBASE CONSOLIDATED SUCCESSFULLY\n" + "📁 MARKDOWN FILE LOCATION: %s" + "\n", output_file)
 
 
-# execute via "python -m alloy"
 if __name__ == "__main__":
     generate_markdown.main()
