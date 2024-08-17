@@ -4,7 +4,7 @@
 
 **codebase consolidation tool.**
 
-![PyPi Status Badge](https://img.shields.io/pypi/v/alloy)
+![PyPi Status Badge](https://img.shields.io/pypi/v/alloy?labelColor=fff8e7&color=fccccc)
 ![Unittests status badge](https://github.com/OLILHR/alloy/workflows/Unittests/badge.svg)
 ![Coverage status badge](https://github.com/OLILHR/alloy/workflows/Coverage/badge.svg)
 ![Pylint status badge](https://github.com/OLILHR/alloy/workflows/Linting/badge.svg)
