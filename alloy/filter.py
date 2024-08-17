@@ -22,12 +22,16 @@ def read_alloyignore(project_root, extension_filter):
     print(f"Extension filter: {extension_filter}")
     print(f"Default ignore list: {default_ignore_list}")
 
+    custom_ignore_list = []
     if os.path.exists(alloyignore):
         with open(alloyignore, "r", encoding="utf-8") as f:
             custom_ignore_list = [line.strip() for line in f if line.strip() and not line.startswith("#")]
-        default_ignore_list.extend(custom_ignore_list)
-        print(f"Custom ignore list: {custom_ignore_list}")
+    else:
+        print(f"Warning: .alloyignore file not found at {alloyignore}")
 
+    print(f"Custom ignore list: {custom_ignore_list}")
+
+    default_ignore_list.extend(custom_ignore_list)
     print(f"Final ignore list: {default_ignore_list}")
 
     def exclude_files(file_path):
@@ -57,7 +61,11 @@ def read_alloyignore(project_root, extension_filter):
                     if file_path.startswith(parts[0]) and file_path.endswith(parts[1]):
                         print(f"File {file_path} excluded by pattern {pattern}")
                         return True
-            elif pattern in file_path or pattern == os.path.basename(file_path):
+            elif (
+                pattern == file_path
+                or pattern == os.path.basename(file_path)
+                or (pattern.startswith(".") and file_path.endswith(pattern))
+            ):
                 print(f"File {file_path} excluded by pattern {pattern}")
                 return True
 

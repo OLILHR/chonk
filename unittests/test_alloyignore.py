@@ -21,13 +21,7 @@ def test_read_alloyignore(
     expected_path = os.path.join(project_root, ".alloyignore")
     print(f"Expected .alloyignore path: {expected_path}")
 
-    def mock_read_alloyignore(project_root, extension_filter):
-        print(f"mock_read_alloyignore called with project_root: {project_root}, extension_filter: {extension_filter}")
-        exclude_func = read_alloyignore(project_root, extension_filter)
-        print(f"Exclude function created: {exclude_func}")
-        return exclude_func
-
-    with patch("alloy.filter.read_alloyignore", side_effect=mock_read_alloyignore):
+    with patch("os.path.exists", return_value=True):
         with patch("builtins.open", mock_open(read_data=mock_alloyignore)) as mock_file:
             print("Calling read_alloyignore")
             exclude = read_alloyignore(project_root, [])
