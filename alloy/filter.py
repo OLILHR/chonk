@@ -1,7 +1,4 @@
-import logging
 import os
-
-logger = logging.getLogger(__name__)
 
 
 def ignore_comments(file_path):
@@ -21,50 +18,50 @@ def read_alloyignore(project_root, extension_filter):
     alloyignore = os.path.join(project_root, ".alloyignore")
     default_ignore_list = DEFAULT_IGNORE_LIST.copy()
 
-    logger.debug("Project root: %s", project_root)
-    logger.debug("Extension filter: %s", extension_filter)
-    logger.debug("Default ignore list: %s", default_ignore_list)
+    print(f"Project root: {project_root}")
+    print(f"Extension filter: {extension_filter}")
+    print(f"Default ignore list: {default_ignore_list}")
 
     if os.path.exists(alloyignore):
         with open(alloyignore, "r", encoding="utf-8") as f:
             custom_ignore_list = [line.strip() for line in f if line.strip() and not line.startswith("#")]
         default_ignore_list.extend(custom_ignore_list)
-        logger.debug("Custom ignore list: %s", custom_ignore_list)
+        print(f"Custom ignore list: {custom_ignore_list}")
 
-    logger.debug("Final ignore list: %s", default_ignore_list)
+    print(f"Final ignore list: {default_ignore_list}")
 
     def exclude_files(file_path):
         file_path = file_path.replace(os.sep, "/")
-        logger.debug("Checking file: %s", file_path)
+        print(f"Checking file: {file_path}")
 
         if extension_filter:
             _, file_extension = os.path.splitext(file_path)
             if file_extension[1:] in extension_filter:
-                logger.debug("File %s not excluded due to extension filter", file_path)
+                print(f"File {file_path} not excluded due to extension filter")
                 return False
 
         for pattern in default_ignore_list:
             pattern = pattern.replace(os.sep, "/")
-            logger.debug("Checking pattern: %s", pattern)
+            print(f"Checking pattern: {pattern}")
             if pattern.startswith("/"):  # covers absolute paths from the root
                 if file_path.startswith(pattern[1:]):
-                    logger.debug("File %s excluded by pattern %s", file_path, pattern)
+                    print(f"File {file_path} excluded by pattern {pattern}")
                     return True
             elif pattern.endswith("/"):  # ignores certain directories
                 if any(part == pattern[:-1] for part in file_path.split("/")):
-                    logger.debug("File %s excluded by pattern %s", file_path, pattern)
+                    print(f"File {file_path} excluded by pattern {pattern}")
                     return True
             elif "*" in pattern:  # handle wildcard patterns
                 parts = pattern.split("*")
                 if len(parts) == 2:
                     if file_path.startswith(parts[0]) and file_path.endswith(parts[1]):
-                        logger.debug("File %s excluded by pattern %s", file_path, pattern)
+                        print(f"File {file_path} excluded by pattern {pattern}")
                         return True
             elif pattern in file_path or pattern == os.path.basename(file_path):
-                logger.debug("File %s excluded by pattern %s", file_path, pattern)
+                print(f"File {file_path} excluded by pattern {pattern}")
                 return True
 
-        logger.debug("File %s not excluded", file_path)
+        print(f"File {file_path} not excluded")
         return False
 
     return exclude_files
