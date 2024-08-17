@@ -87,7 +87,7 @@ def test_remove_trailing_whitespace_multiple_newlines():
 
 
 @pytest.mark.parametrize(
-    "file_name, expected",
+    "file, expected",
     [
         ("normal.py", "normal\\.py"),
         ("__init__.py", "\\_\\_init\\_\\_\\.py"),
@@ -97,5 +97,5 @@ def test_remove_trailing_whitespace_multiple_newlines():
         ("(test).js", "\\(test\\)\\.js"),
     ],
 )
-def test_escape_markdown_characters(file_name, expected):
-    assert escape_markdown_characters(file_name) == expected
+def test_escape_markdown_characters(file, expected):
+    assert escape_markdown_characters(file) == expected
