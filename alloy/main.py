@@ -100,7 +100,6 @@ def generate_markdown(input_path, output_path, extension_filter):
         + "💾 MARKDOWN FILE SIZE: %s"
         + "\n"
         + "📄 FILES PROCESSED: %d"
-        + "\n"
         + "\n",
         output_file,
         file_size,

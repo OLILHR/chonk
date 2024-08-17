@@ -18,6 +18,7 @@ classifiers = [
 dependencies = [
     "click>=8.1.7",
     "prompt_toolkit>=3.0.47",
+    "tiktoken>=0.7.0",
 ]
 dynamic = ["version"]
 readme = "README.md"
