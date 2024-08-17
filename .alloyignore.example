@@ -55,6 +55,6 @@ README.md
 #     "*.pyc",
 #     # alloy-specific files
 #     ".alloyignore",
-#     ".alloy.example",
+#     ".alloyignore.example",
 #     "alloy.md",
 # ]

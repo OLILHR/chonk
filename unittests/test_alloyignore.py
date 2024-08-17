@@ -1,7 +1,7 @@
 import os
 from unittest.mock import mock_open, patch
 
-from alloy.filter import DEFAULT_IGNORE_LIST, ignore_comments, read_alloyignore
+from alloy.filter import ignore_comments, read_alloyignore
 
 
 def test_read_alloyignore(
@@ -9,25 +9,16 @@ def test_read_alloyignore(
     mock_alloyignore_content,
     project_root,
 ):
-    print("Starting test_read_alloyignore")
-    print(f"mock_alloyignore: {mock_alloyignore}")
-    print(f"mock_alloyignore_content: {mock_alloyignore_content}")
-    print(f"project_root: {project_root}")
-    print(f"DEFAULT_IGNORE_LIST: {DEFAULT_IGNORE_LIST}")
 
     assert ".png" in mock_alloyignore_content
     assert ".svg" in mock_alloyignore_content
 
     expected_path = os.path.join(project_root, ".alloyignore")
-    print(f"Expected .alloyignore path: {expected_path}")
 
     with patch("os.path.exists", return_value=True):
         with patch("builtins.open", mock_open(read_data=mock_alloyignore)) as mock_file:
-            print("Calling read_alloyignore")
             exclude = read_alloyignore(project_root, [])
-            print(f"Exclude function: {exclude}")
 
-            print("Testing exclude function")
             test_files = [
                 "test.png",
                 "test.svg",
@@ -40,15 +31,11 @@ def test_read_alloyignore(
             ]
             for file in test_files:
                 result = exclude(file)
-                print(f"exclude('{file}') = {result}")
                 if file in ["test.png", "test.svg", "test.log"] or file.startswith("node_modules/"):
-                    assert result is True, f"Expected exclude('{file}') to be True, but got False"
+                    assert result is True
                 else:
-                    assert result is False, f"Expected exclude('{file}') to be False, but got True"
+                    assert result is False
 
-    print("Finished test_read_alloyignore")
-
-    # Check if the mock file was opened with the correct arguments
     mock_file.assert_called_once_with(expected_path, "r", encoding="utf-8")
 
 

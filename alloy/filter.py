@@ -18,58 +18,41 @@ def read_alloyignore(project_root, extension_filter):
     alloyignore = os.path.join(project_root, ".alloyignore")
     default_ignore_list = DEFAULT_IGNORE_LIST.copy()
 
-    print(f"Project root: {project_root}")
-    print(f"Extension filter: {extension_filter}")
-    print(f"Default ignore list: {default_ignore_list}")
-
-    custom_ignore_list = []
+    ignore_list = []
     if os.path.exists(alloyignore):
         with open(alloyignore, "r", encoding="utf-8") as f:
-            custom_ignore_list = [line.strip() for line in f if line.strip() and not line.startswith("#")]
-    else:
-        print(f"Warning: .alloyignore file not found at {alloyignore}")
+            ignore_list = [line.strip() for line in f if line.strip() and not line.startswith("#")]
 
-    print(f"Custom ignore list: {custom_ignore_list}")
-
-    default_ignore_list.extend(custom_ignore_list)
-    print(f"Final ignore list: {default_ignore_list}")
+    default_ignore_list.extend(ignore_list)
 
     def exclude_files(file_path):
         file_path = file_path.replace(os.sep, "/")
-        print(f"Checking file: {file_path}")
 
         if extension_filter:
             _, file_extension = os.path.splitext(file_path)
             if file_extension[1:] in extension_filter:
-                print(f"File {file_path} not excluded due to extension filter")
                 return False
 
         for pattern in default_ignore_list:
             pattern = pattern.replace(os.sep, "/")
-            print(f"Checking pattern: {pattern}")
             if pattern.startswith("/"):  # covers absolute paths from the root
                 if file_path.startswith(pattern[1:]):
-                    print(f"File {file_path} excluded by pattern {pattern}")
                     return True
-            elif pattern.endswith("/"):  # ignores certain directories
+            elif pattern.endswith("/"):  # handles directories
                 if any(part == pattern[:-1] for part in file_path.split("/")):
-                    print(f"File {file_path} excluded by pattern {pattern}")
                     return True
             elif "*" in pattern:  # handle wildcard patterns
                 parts = pattern.split("*")
                 if len(parts) == 2:
                     if file_path.startswith(parts[0]) and file_path.endswith(parts[1]):
-                        print(f"File {file_path} excluded by pattern {pattern}")
                         return True
             elif (
                 pattern == file_path
                 or pattern == os.path.basename(file_path)
                 or (pattern.startswith(".") and file_path.endswith(pattern))
             ):
-                print(f"File {file_path} excluded by pattern {pattern}")
                 return True
 
-        print(f"File {file_path} not excluded")
         return False
 
     return exclude_files
@@ -113,6 +96,6 @@ DEFAULT_IGNORE_LIST = [
     "*.pyc",
     # alloy-specific files
     ".alloyignore",
-    ".alloy.example",
+    ".alloyignore.example",
     "alloy.md",
 ]
