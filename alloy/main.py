@@ -27,6 +27,7 @@ def get_project_root():
     root_indicators = [
         ".git",
         "package.json",
+        "pdm.lock",
         "pyproject.toml",
         "setup.py",
         "tox.ini",
@@ -69,6 +70,7 @@ def path_prompt(message, default, exists=False):
     help="enables optional filtering by extensions, for instance: -f py,json",  # markdown contains only .py/.json files
 )
 def generate_markdown(input_path, output_path, extension_filter):
+    no_flags_provided = input_path is None and output_path is None and not extension_filter
     project_root = get_project_root()
 
     if input_path is None:
@@ -82,7 +84,7 @@ def generate_markdown(input_path, output_path, extension_filter):
         output_path = os.path.abspath(output_path)
 
     extensions = extension_filter
-    if not extensions and input_path is None and output_path is None:
+    if no_flags_provided:
         extensions_input = click.prompt(
             "🔎 (OPTIONAL) FILTER FOR SPECIFIC EXTENSIONS (COMMA-SEPARATED)",
             default="",
