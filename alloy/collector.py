@@ -2,6 +2,8 @@ import logging
 import os
 import re
 
+import tiktoken
+
 from .filter import filter_extensions, read_alloyignore
 
 _logger = logging.getLogger(__name__)
@@ -18,12 +20,18 @@ def escape_markdown_characters(file_name):
     return re.sub(special_chars, r"\\\1", file_name)
 
 
+def count_tokens(text):
+    encoding = tiktoken.get_encoding("cl100k_base")  # encoding for GPT-3.5/GPT-4
+    return len(encoding.encode(text))
+
+
 # pylint: disable=too-many-locals
 def consolidate(path, extensions=None):
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     exclude_files = read_alloyignore(project_root, extensions)
     codebase = ""
     file_count = 0
+    token_count = 0
 
     for root, dirs, files in os.walk(path):
         dirs[:] = [d for d in dirs if not exclude_files(os.path.relpath(str(os.path.join(root, d)), path))]
@@ -48,9 +56,11 @@ def consolidate(path, extensions=None):
                     continue
 
             escaped_relative_path = escape_markdown_characters(relative_path)
-            codebase += f"\n#### {escaped_relative_path}\n\n```{file_extension[1:]}\n{content.rstrip()}\n```\n"
+            file_content = f"\n#### {escaped_relative_path}\n\n```{file_extension[1:]}\n{content.rstrip()}\n```\n"
+            codebase += file_content
             file_count += 1
+            token_count += count_tokens(file_content)
 
     codebase = remove_trailing_whitespace(codebase)
 
-    return codebase, file_count
+    return codebase, file_count, token_count

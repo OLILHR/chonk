@@ -1,5 +1,6 @@
+import io
 import os
-from unittest.mock import mock_open
+from unittest.mock import MagicMock, mock_open
 
 import pytest
 
@@ -31,7 +32,9 @@ def mock_project(project_root, mock_alloyignore):
 @pytest.fixture(scope="function")
 def mock_operations(monkeypatch, mock_project):
     def _mock_open(file, mode="r", encoding=None):
-        return mock_open(read_data=mock_project[file])(file, mode, encoding)
+        if file in mock_project:
+            return mock_open(read_data=mock_project[file])(file, mode, encoding)
+        return io.StringIO("")  # Return empty file-like object for unknown files
 
     def _mock_exists(path):
         return path in mock_project
@@ -57,3 +60,13 @@ def mock_operations(monkeypatch, mock_project):
     monkeypatch.setattr("builtins.open", _mock_open)
     monkeypatch.setattr("os.path.exists", _mock_exists)
     monkeypatch.setattr("os.walk", _mock_walk)
+
+    # Fully mock tiktoken
+    mock_tiktoken = MagicMock()
+    mock_encoding = MagicMock()
+    mock_encoding.encode.return_value = [1, 2, 3]  # Dummy token ids
+    mock_tiktoken.get_encoding.return_value = mock_encoding
+    monkeypatch.setattr("tiktoken.get_encoding", mock_tiktoken.get_encoding)
+
+    # Mock the entire tiktoken module
+    monkeypatch.setattr("alloy.collector.tiktoken", mock_tiktoken)

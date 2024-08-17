@@ -22,13 +22,13 @@ def path_prompt(message, default, exists=False):
     Provides basic shell features, like autocompletion, during prompts.
     """
 
-    completer = PathCompleter(only_directories=False, expanduser=True)
+    path_completer = PathCompleter(only_directories=False, expanduser=True)
 
     if not default.endswith(os.path.sep):
         default += os.path.sep
 
     while True:
-        path = prompt(f"{message} ", default=default, completer=completer)
+        path = prompt(f"{message} ", default=default, completer=path_completer)
         path = os.path.abspath(os.path.expanduser(path))
         if not exists or os.path.exists(path):
             return path
@@ -71,7 +71,7 @@ def generate_markdown(input_path, output_path, extension_filter):
             extensions = parse_extensions(None, None, [extensions_input])
 
     extensions = list(extensions) if extensions else None
-    markdown_content, file_count = consolidate(input_path, extensions)
+    markdown_content, file_count, token_count = consolidate(input_path, extensions)
 
     if len(markdown_content.encode("utf-8")) > MAX_FILE_SIZE:
         _logger.error("\n" + "🔴 GENERATED CONTENT EXCEEDS 10 MB. CONSIDER ADDING LARGER FILES TO YOUR .alloyignore.")
@@ -100,10 +100,13 @@ def generate_markdown(input_path, output_path, extension_filter):
         + "💾 MARKDOWN FILE SIZE: %s"
         + "\n"
         + "📄 FILES PROCESSED: %d"
+        + "\n"
+        + "🪙 TOKEN COUNT: %d"
         + "\n",
         output_file,
         file_size,
         file_count,
+        token_count,
     )
 
 
