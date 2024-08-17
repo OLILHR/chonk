@@ -16,7 +16,7 @@
 ## ℹ️ Installation
 
 ```sh
-$ pip install git+https://github.com/OLILHR/alloy.git
+pip install git+https://github.com/OLILHR/alloy.git
 ```
 
 > [!NOTE]
@@ -27,7 +27,7 @@ $ pip install git+https://github.com/OLILHR/alloy.git
 To execute the script, simply run
 
 ```sh
-$ alloy
+alloy
 ```
 
 and follow the prompts by providing an input directory, an output file destination and optional filters.
@@ -35,7 +35,7 @@ and follow the prompts by providing an input directory, an output file destinati
 Alternatively, the script can also be executed using a single command with the appropriate flags:  
 
 ```sh
-$ alloy -i <input_path> -o <output_path> -f <(optional) filters>
+alloy -i <input_path> -o <output_path> -f <(optional) filters>
 ```
 
 For further information, run `$ alloy --help`.
