@@ -1,6 +1,8 @@
 import os
 import re
 
+import pytest
+
 from alloy.collector import consolidate, escape_markdown_characters, remove_trailing_whitespace
 
 
@@ -84,5 +86,16 @@ def test_remove_trailing_whitespace_multiple_newlines():
     assert remove_trailing_whitespace(input_content) == expected_output
 
 
-def test_escape_markdown_characters():
-    assert escape_markdown_characters("__init__.py") == "\\_\\_init\\_\\_\\.py"
+@pytest.mark.parametrize(
+    "file_name, expected",
+    [
+        ("normal.py", "normal\\.py"),
+        ("__init__.py", "\\_\\_init\\_\\_\\.py"),
+        ("test-[file].md", "test\\-\\[file\\]\\.md"),
+        ("test_file.txt", "test\\_file\\.txt"),
+        ("!important.test", "\\!important\\.test"),
+        ("(test).js", "\\(test\\)\\.js"),
+    ],
+)
+def test_escape_markdown_characters(file_name, expected):
+    assert escape_markdown_characters(file_name) == expected
