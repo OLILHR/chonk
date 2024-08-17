@@ -83,7 +83,26 @@ def generate_markdown(input_path, output_path, extension_filter):
     with open(output_file, "w", encoding="utf-8") as f:
         f.write(markdown_content)
 
-    _logger.info("\n" + "🟢 CODEBASE CONSOLIDATED SUCCESSFULLY\n" + "📁 MARKDOWN FILE LOCATION: %s" + "\n", output_file)
+    output_file_size = os.path.getsize(output_file)
+    if output_file_size < 1024:
+        size = f"{output_file_size} bytes"
+    elif output_file_size < 1024 * 1024:
+        size = f"{output_file_size / 1024:.2f} KB"
+    else:
+        size = f"{output_file_size / (1024 * 1024):.2f} MB"
+
+    _logger.info(
+        "\n"
+        + "🟢 CODEBASE CONSOLIDATED SUCCESSFULLY \n"
+        + "\n"
+        + "📁 MARKDOWN FILE LOCATION: %s"
+        + "\n"
+        + "💾 FILE SIZE: %s"
+        + "\n"
+        + "\n",
+        output_file,
+        size,
+    )
 
 
 if __name__ == "__main__":
