@@ -16,17 +16,28 @@ def remove_trailing_whitespace(content):
 
 
 def escape_markdown_characters(file_name):
+    """
+    Escapes special characters in file names such as "__init__.py"
+    in order to display paths correctly inside the output markdown file.
+    """
     special_chars = r"([*_`\[\]()~>#+=|{}.!-])"
     return re.sub(special_chars, r"\\\1", file_name)
 
 
 def count_tokens(text):
-    encoding = tiktoken.get_encoding("cl100k_base")  # encoding for GPT-3.5/GPT-4
+    """
+    Encoding for GPT-3.5/GPT-4.0.
+    """
+    encoding = tiktoken.get_encoding("cl100k_base")
     return len(encoding.encode(text))
 
 
 # pylint: disable=too-many-locals
 def consolidate(path, extensions=None):
+    """
+    Gathers and formats the content and metadata of all files inside a provided input directory,
+    while taking into account optional extension filters as well as .alloyignore specific exceptions.
+    """
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     exclude_files = read_alloyignore(project_root, extensions)
     codebase = ""

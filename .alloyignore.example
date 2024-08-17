@@ -23,7 +23,6 @@ htmlcov/
 .pdm-build/
 pdm.lock
 __pycache__
-*.pyc
 .pytest_cache
 py.typed
 .mypy_cache
@@ -50,9 +49,11 @@ README.md
 #     "Thumbs.db",
 #     ".venv/",
 #     ".vscode/",
-#
+#     # JS
 #     "node_modules/",
-#
+#     # Python
+#     "*.pyc",
+#     # alloy-specific files
 #     ".alloyignore",
 #     ".alloy.example",
 #     "alloy.md",

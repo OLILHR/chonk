@@ -1,7 +1,7 @@
 import os
 
 
-def ignore_patterns(file_path):
+def ignore_comments(file_path):
     ignore_list = []
     with open(file_path, "r", encoding="utf-8") as f:
         for line in f:
@@ -19,7 +19,7 @@ def read_alloyignore(project_root, extension_filter):
     default_ignore_list = DEFAULT_IGNORE_LIST.copy()
 
     if os.path.exists(alloyignore):
-        default_ignore_list.extend(ignore_patterns(alloyignore))
+        default_ignore_list.extend(ignore_comments(alloyignore))
 
     # pylint: disable=too-many-return-statements
     def exclude_files(file_path):
@@ -81,7 +81,10 @@ DEFAULT_IGNORE_LIST = [
     "Thumbs.db",
     ".venv/",
     ".vscode/",
+    # JS
     "node_modules/",
+    # Python
+    "*.pyc",
     # alloy-specific files
     ".alloyignore",
     ".alloy.example",

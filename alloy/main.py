@@ -17,11 +17,33 @@ _logger.setLevel(GLOBAL_LOG_LEVEL)
 MAX_FILE_SIZE = 1024 * 1024 * 10  # 10 MB
 
 
+def get_project_root():
+    """
+    Required for input/output path prompts to display the project root as default path.
+    """
+
+    current_dir = os.path.abspath(os.getcwd())
+
+    root_indicators = [
+        ".git",
+        "package.json",
+        "pyproject.toml",
+        "setup.py",
+        "tox.ini",
+    ]
+
+    while current_dir != os.path.dirname(current_dir):
+        if any(os.path.exists(os.path.join(current_dir, indicator)) for indicator in root_indicators):
+            return current_dir
+        current_dir = os.path.dirname(current_dir)
+
+    return os.getcwd()
+
+
 def path_prompt(message, default, exists=False):
     """
     Provides basic shell features, like autocompletion, during prompts.
     """
-
     path_completer = PathCompleter(only_directories=False, expanduser=True)
 
     if not default.endswith(os.path.sep):
@@ -47,18 +69,17 @@ def path_prompt(message, default, exists=False):
     help="enables optional filtering by extensions, for instance: -f py,json",  # markdown contains only .py/.json files
 )
 def generate_markdown(input_path, output_path, extension_filter):
-    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    current_dir = os.getcwd()
+    project_root = get_project_root()
 
     if input_path is None:
-        input_path = path_prompt("📁 INPUT PATH OF YOUR TARGET DIRECTORY -", default=current_dir, exists=True)
+        input_path = path_prompt("📁 INPUT PATH OF YOUR TARGET DIRECTORY -", default=project_root, exists=True)
     else:
-        input_path = os.path.abspath(os.path.join(current_dir, input_path))
+        input_path = os.path.abspath(input_path)
 
     if output_path is None:
         output_path = path_prompt("📁 OUTPUT PATH FOR THE MARKDOWN FILE -", default=project_root)
     else:
-        output_path = os.path.abspath(os.path.join(current_dir, output_path))
+        output_path = os.path.abspath(output_path)
 
     extensions = extension_filter
     if not extensions and input_path is None and output_path is None:
@@ -111,4 +132,4 @@ def generate_markdown(input_path, output_path, extension_filter):
 
 
 if __name__ == "__main__":
-    generate_markdown.main()
+    generate_markdown.main(standalone_mode=False)
