@@ -1,7 +1,7 @@
 import os
 from unittest.mock import mock_open, patch
 
-from codebase.filter import ignore_comments, read_codebaseignore
+from codebase.filter import skip_ignore_list_comments, read_codebaseignore
 
 
 def test_read_codebaseignore(
@@ -39,11 +39,11 @@ def test_read_codebaseignore(
     mock_file.assert_called_once_with(expected_path, "r", encoding="utf-8")
 
 
-def test_ignore_comments(mock_codebaseignore, mock_codebaseignore_content, project_root):
+def test_skip_ignore_list_comments(mock_codebaseignore, mock_codebaseignore_content, project_root):
     codebaseignore_path = os.path.join(project_root, ".codebaseignore")
 
     with patch("builtins.open", mock_open(read_data=mock_codebaseignore)) as mock_file:
-        result = ignore_comments(codebaseignore_path)
+        result = skip_ignore_list_comments(codebaseignore_path)
 
     mock_file.assert_called_once_with(codebaseignore_path, "r", encoding="utf-8")
     expected_result = [line for line in mock_codebaseignore_content if line and not line.startswith("#")]

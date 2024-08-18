@@ -1,7 +1,7 @@
 import os
 
 
-def ignore_comments(file_path):
+def skip_ignore_list_comments(file_path):
     ignore_list = []
     with open(file_path, "r", encoding="utf-8") as f:
         for line in f:
