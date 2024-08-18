@@ -1,8 +1,10 @@
 <div align="center">
 
-<img width="65.5%" src="codebase.svg" alt="codebase">
+<img width="80%" src="codebase.svg" alt="codebase.svg"><br>
 
-![PyPI status badge](https://img.shields.io/pypi/v/codebase?labelColor=fff8e7&color=fccccc)
+<p>data consolidation tool.</p>
+
+![PyPI status badge](https://img.shields.io/pypi/v/alloy?labelColor=fff8e7&color=fccccc)
 ![Unittests status badge](https://github.com/OLILHR/codebase/workflows/Unittests/badge.svg)
 ![Coverage status badge](https://github.com/OLILHR/codebase/workflows/Coverage/badge.svg)
 ![Pylint status badge](https://github.com/OLILHR/codebase/workflows/Linting/badge.svg)
