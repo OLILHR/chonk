@@ -43,7 +43,7 @@ def get_project_root():
 
 def path_prompt(message, default, exists=False):
     """
-    Provides basic shell features, like autocompletion, during prompts.
+    Enables basic shell features, like autocompletion, for CLI prompts.
     """
     path_completer = PathCompleter(only_directories=False, expanduser=True)
 
@@ -102,19 +102,19 @@ def generate_markdown(input_path, output_path, extension_filter):
         )
         return
 
-    output_file = os.path.join(output_path, "codebase.md")
+    codebase = os.path.join(output_path, "codebase.md")
 
     os.makedirs(output_path, exist_ok=True)
-    with open(output_file, "w", encoding="utf-8") as f:
+    with open(codebase, "w", encoding="utf-8") as f:
         f.write(markdown_content)
 
-    output_file_size = os.path.getsize(output_file)
-    if output_file_size < 1024:
-        file_size = f"{output_file_size} bytes"
-    elif output_file_size < 1024 * 1024:
-        file_size = f"{output_file_size / 1024:.2f} KB"
+    codebase_size = os.path.getsize(codebase)
+    if codebase_size < 1024:
+        file_size = f"{codebase_size} bytes"
+    elif codebase_size < 1024 * 1024:
+        file_size = f"{codebase_size / 1024:.2f} KB"
     else:
-        file_size = f"{output_file_size / (1024 * 1024):.2f} MB"
+        file_size = f"{codebase_size / (1024 * 1024):.2f} MB"
 
     _logger.info(
         "\n"
@@ -128,7 +128,7 @@ def generate_markdown(input_path, output_path, extension_filter):
         + "\n"
         + "🪙 TOKEN COUNT: %d"
         + "\n",
-        output_file,
+        codebase,
         file_size,
         file_count,
         token_count,

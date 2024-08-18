@@ -20,7 +20,7 @@ pip install git+https://github.com/OLILHR/codebase.git
 ```
 
 > [!NOTE]
-> It is generally recommended to add an `.codebaseignore` file to the root directory of the projects you'd like to consolidate.
+> It is generally recommended to add a `.codebaseignore` file to the root directory of the projects you'd like to consolidate.
 > All files, folders and file extensions specified in `.codebaseignore` will be excluded from the output file.
 > Please refer to the `.codebaseignore.example` for suggestions regarding what to include in `.codebaseignore`.
 
