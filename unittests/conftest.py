@@ -11,7 +11,7 @@ def project_root():
 
 
 @pytest.fixture(scope="function")
-def mock_alloyignore_content():
+def mock_codebaseignore_content():
     return [
         ".png",
         ".svg",
@@ -22,12 +22,12 @@ def mock_alloyignore_content():
 
 
 @pytest.fixture(scope="function")
-def mock_alloyignore(mock_alloyignore_content):
-    return "\n".join(mock_alloyignore_content) + "\n"
+def mock_codebaseignore(mock_codebaseignore_content):
+    return "\n".join(mock_codebaseignore_content) + "\n"
 
 
 @pytest.fixture(scope="function")
-def mock_project(project_root, mock_alloyignore):
+def mock_project(project_root, mock_codebaseignore):
     files = {
         os.path.join(project_root, "markdown.md"): "# markdown content",
         os.path.join(project_root, "python.py"): 'print("python content")',
@@ -35,7 +35,7 @@ def mock_project(project_root, mock_alloyignore):
         os.path.join(project_root, "image.png"): "<image content>",
         os.path.join(project_root, "subdirectory", "markup.yml"): "key: value",
         os.path.join(project_root, "subdirectory", "vector.svg"): "<svg></svg>",
-        os.path.join(project_root, ".alloyignore"): mock_alloyignore,
+        os.path.join(project_root, ".codebaseignore"): mock_codebaseignore,
     }
     return files
 
@@ -58,7 +58,7 @@ def mock_operations(monkeypatch, mock_project):
             parts = relpath.split(os.sep)
             if len(parts) > 1:
                 directories.add(parts[0])
-            elif len(parts) == 1 and parts[0] != ".alloyignore":
+            elif len(parts) == 1 and parts[0] != ".codebaseignore":
                 files.append(parts[0])
 
         yield top, list(directories), files
@@ -80,4 +80,4 @@ def mock_operations(monkeypatch, mock_project):
     monkeypatch.setattr("tiktoken.get_encoding", mock_tiktoken.get_encoding)
 
     # Mock the entire tiktoken module
-    monkeypatch.setattr("alloy.collector.tiktoken", mock_tiktoken)
+    monkeypatch.setattr("codebase.collector.tiktoken", mock_tiktoken)

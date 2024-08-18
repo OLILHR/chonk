@@ -31,7 +31,7 @@ jobs:
   deploying:
     name: Build and deploy package to PyPI
     runs-on: ubuntu-latest
-    # GitHub respository settings/environments/create "release" environment
+    # GitHub repository settings/environments/create "release" environment
     # set up trusted publishing on https://pypi.org/ @ settings/manage/publishing
     environment: release
     permissions:

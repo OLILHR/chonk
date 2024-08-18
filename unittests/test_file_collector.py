@@ -3,23 +3,23 @@ import re
 
 import pytest
 
-from alloy.collector import consolidate, escape_markdown_characters, remove_trailing_whitespace
+from codebase.collector import consolidate, escape_markdown_characters, remove_trailing_whitespace
 
 
 def test_consolidate_excludes_ignored_files(
     project_root, mock_project, mock_operations
 ):  # pylint: disable=unused-argument
     codebase, _, _ = consolidate(project_root)
-    alloyignore = mock_project[os.path.join(project_root, ".alloyignore")]
+    codebaseignore = mock_project[os.path.join(project_root, ".codebaseignore")]
 
-    assert ".png" in alloyignore
-    assert ".svg" in alloyignore
+    assert ".png" in codebaseignore
+    assert ".svg" in codebaseignore
     assert not re.search(rf"#### {re.escape(escape_markdown_characters('image.png'))}", codebase)
     assert not re.search(rf"#### {re.escape(escape_markdown_characters('vector.svg'))}", codebase)
 
-    assert ".markdown.md" not in alloyignore
-    assert ".python.py" not in alloyignore
-    assert "text.txt" not in alloyignore
+    assert ".markdown.md" not in codebaseignore
+    assert ".python.py" not in codebaseignore
+    assert "text.txt" not in codebaseignore
     assert re.search(rf"#### {re.escape(escape_markdown_characters('markdown.md'))}", codebase)
     assert re.search(rf"#### {re.escape(escape_markdown_characters('python.py'))}", codebase)
     assert re.search(rf"#### {re.escape(escape_markdown_characters('text.txt'))}", codebase)
@@ -45,7 +45,7 @@ def test_consolidate_considers_subdirectories(
     subdir_svg_path = os.path.join("subdirectory", "vector.svg")
     assert not re.search(
         rf"#### {re.escape(escape_markdown_characters(subdir_svg_path))}", codebase
-    ), f"File {subdir_svg_path} should be excluded as per .alloyignore"
+    ), f"File {subdir_svg_path} should be excluded as per .codebaseignore"
 
 
 def test_consolidate_file_token_count(project_root, mock_project, mock_operations):  # pylint: disable=unused-argument
@@ -55,7 +55,7 @@ def test_consolidate_file_token_count(project_root, mock_project, mock_operation
         [
             f
             for f in mock_project.keys()
-            if not f.endswith(".alloyignore") and not f.endswith(".png") and not f.endswith(".svg")
+            if not f.endswith(".codebaseignore") and not f.endswith(".png") and not f.endswith(".svg")
         ]
     )
 
@@ -63,7 +63,7 @@ def test_consolidate_file_token_count(project_root, mock_project, mock_operation
     assert token_count > 0
 
     for file_path, content in mock_project.items():
-        if not file_path.endswith((".alloyignore", ".png", ".svg")):
+        if not file_path.endswith((".codebaseignore", ".png", ".svg")):
             escaped_path = escape_markdown_characters(os.path.relpath(file_path, project_root))
             assert re.search(rf"#### {re.escape(escaped_path)}", codebase)
             assert content in codebase
