@@ -1,8 +1,6 @@
 <div align="center">
 
-<img width="65%" src="" alt="codebase">
-
-**codebase consolidation tool.**
+<img width="65.5%" src="codebase.svg" alt="codebase">
 
 ![PyPI status badge](https://img.shields.io/pypi/v/codebase?labelColor=fff8e7&color=fccccc)
 ![Unittests status badge](https://github.com/OLILHR/codebase/workflows/Unittests/badge.svg)
@@ -12,7 +10,6 @@
 
 </div>
 
-
 ## ℹ️ Installation
 
 ```sh
@@ -20,7 +17,7 @@ pip install git+https://github.com/OLILHR/codebase.git
 ```
 
 > [!NOTE]
-> It is generally recommended to add a `.codebaseignore` file to the root directory of the projects you'd like to consolidate.
+> It is generally recommended to add a `.codebaseignore` file to the root directory of the codebase you'd like to consolidate.
 > All files, folders and file extensions specified in `.codebaseignore` will be excluded from the output file.
 > Please refer to the `.codebaseignore.example` for suggestions regarding what to include in `.codebaseignore`.
 
