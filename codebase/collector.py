@@ -24,6 +24,15 @@ def escape_markdown_characters(file_name):
     return re.sub(special_chars, r"\\\1", file_name)
 
 
+def count_lines_of_code(content):
+    """
+    Count the lines of code within code blocks in the markdown content.
+    """
+    codeblocks = re.findall(r"```[\s\S]*?```", content)
+    lines_of_code = sum(len(block.split("\n")) - 2 for block in codeblocks)  # subtracts 2x ``` from codeblocks
+    return lines_of_code
+
+
 def count_tokens(text):
     """
     Encoding for GPT-3.5/GPT-4.0.
@@ -43,6 +52,7 @@ def consolidate(path, extensions=None):
     codebase = ""
     file_count = 0
     token_count = 0
+    lines_of_code_count = 0
 
     for root, dirs, files in os.walk(path):
         dirs[:] = [d for d in dirs if not exclude_files(os.path.relpath(str(os.path.join(root, d)), path))]
@@ -71,7 +81,8 @@ def consolidate(path, extensions=None):
             codebase += file_content
             file_count += 1
             token_count += count_tokens(file_content)
+            lines_of_code_count += len(content.split("\n"))
 
     codebase = remove_trailing_whitespace(codebase)
 
-    return codebase, file_count, token_count
+    return codebase, file_count, token_count, lines_of_code_count

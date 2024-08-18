@@ -1,7 +1,7 @@
 import os
 from unittest.mock import mock_open, patch
 
-from codebase.filter import skip_ignore_list_comments, read_codebaseignore
+from codebase.filter import read_codebaseignore, skip_ignore_list_comments
 
 
 def test_read_codebaseignore(

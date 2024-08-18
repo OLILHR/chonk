@@ -94,7 +94,7 @@ def generate_markdown(input_path, output_path, extension_filter):
             extensions = parse_extensions(None, None, [extensions_input])
 
     extensions = list(extensions) if extensions else None
-    markdown_content, file_count, token_count = consolidate(input_path, extensions)
+    markdown_content, file_count, lines_of_code_count, token_count = consolidate(input_path, extensions)
 
     if len(markdown_content.encode("utf-8")) > MAX_FILE_SIZE:
         _logger.error(
@@ -126,11 +126,14 @@ def generate_markdown(input_path, output_path, extension_filter):
         + "\n"
         + "📄 FILES PROCESSED: %d"
         + "\n"
+        + "📊 LINES OF CODE: %d"
+        + "\n"
         + "🪙 TOKEN COUNT: %d"
         + "\n",
         codebase,
         file_size,
         file_count,
+        lines_of_code_count,
         token_count,
     )
 
