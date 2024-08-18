@@ -1,6 +1,8 @@
 <div align="center">
 
-<img width="65.5%" src="codebase.svg" alt="codebase">
+<img width="72.5%" src="codebase.svg" alt="codebase.svg"><br>
+
+<p>data consolidation tool.</p>
 
 ![PyPI status badge](https://img.shields.io/pypi/v/codebase?labelColor=fff8e7&color=fccccc)
 ![Unittests status badge](https://github.com/OLILHR/codebase/workflows/Unittests/badge.svg)
