@@ -76,13 +76,17 @@ def consolidate(path, extensions=None):
     token_count = 0
     lines_of_code_count = 0
 
-    total_files = sum(len(files) for _, _, files in os.walk(path))
+    for root, dirs, files in os.walk(path):
+        dirs[:] = [d for d in dirs if not exclude_files(os.path.relpath(str(os.path.join(root, d)), path))]
+        file_count += sum(
+            1 for file in files if not exclude_files(os.path.relpath(str(os.path.join(root, file)), path))
+        )
 
-    with tqdm(  # inits the progress bar
-        total=total_files,
+    with tqdm(
+        total=file_count,
         unit="file",
         ncols=100,
-        bar_format="▶️ |{desc}: {bar:45} {percentage:3.0f}%| {n_fmt}/{total_fmt}",
+        bar_format="▶️ | {desc}: {bar:45} {percentage:3.0f}% | {n_fmt}/{total_fmt}",
     ) as progress_bar:
         for root, dirs, files in os.walk(path):
             dirs[:] = [d for d in dirs if not exclude_files(os.path.relpath(str(os.path.join(root, d)), path))]
@@ -93,6 +97,7 @@ def consolidate(path, extensions=None):
 
                 if (extensions and not filter_extensions(file_path, extensions)) or exclude_files(relative_path):
                     continue
+
                 _, file_extension = os.path.splitext(file)
 
                 try:
@@ -109,7 +114,6 @@ def consolidate(path, extensions=None):
                 escaped_relative_path = escape_markdown_characters(relative_path)
                 file_content = f"\n#### {escaped_relative_path}\n\n```{file_extension[1:]}\n{content.rstrip()}\n```\n"
                 codebase += file_content
-                file_count += 1
                 token_count += count_tokens(file_content)
                 lines_of_code_count += len(content.split("\n"))
 

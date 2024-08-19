@@ -125,7 +125,7 @@ def generate_markdown(input_path, output_path, extension_filter):
 
     _logger.info(
         "\n"
-        + "🟢 CODEBASE CONSOLIDATED SUCCESSFULLY \n"
+        + "🟢 CODEBASE CONSOLIDATED SUCCESSFULLY.\n"
         + "\n"
         + "📁 MARKDOWN FILE LOCATION: %s"
         + "\n"
