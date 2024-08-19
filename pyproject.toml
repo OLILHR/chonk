@@ -1,5 +1,5 @@
 [project]
-name = "alloy"
+name = "codebase"
 description = "codebase consolidation tool"
 license = { file = "LICENSE" }
 requires-python = ">=3.12"
@@ -18,16 +18,17 @@ classifiers = [
 dependencies = [
     "click>=8.1.7",
     "prompt_toolkit>=3.0.47",
+    "tiktoken>=0.7.0",
 ]
 dynamic = ["version"]
 readme = "README.md"
 
 [project.urls]
-Changelog = "https://github.com/OLILHR/alloy/releases"
-Homepage = "https://github.com/OLILHR/alloy"
+Changelog = "https://github.com/OLILHR/codebase/releases"
+Homepage = "https://github.com/OLILHR/codebase"
 
 [project.scripts]
-alloy = "alloy.main:generate_markdown"
+codebase = "codebase.main:generate_markdown"
 
 [build-system]
 requires = ["pdm-backend"]
@@ -37,7 +38,7 @@ build-backend = "pdm.backend"
 source = "scm"
 
 [tool.pdm.build]
-includes = ["alloy"]
+includes = ["codebase"]
 excludes = ["/unittests"]
 
 [tool.pdm.readme]

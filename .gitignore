@@ -7,13 +7,15 @@
 .pytest_cache/
 .tox/
 .venv
+
 __pycache__/
+dist/
 htmlcov/
 
 # OS
 .DS_Store
 Thumbs.db
 
-# alloy specific files
-.alloyignore
-alloy.md
+# coodebase-specific files
+.codebaseignore
+codebase.md

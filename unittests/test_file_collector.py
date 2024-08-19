@@ -1,45 +1,34 @@
 import os
 import re
 
-from alloy.collector import consolidate, escape_markdown_characters, remove_trailing_whitespace
-from alloy.filter import read_alloyignore
+import pytest
+
+from codebase.collector import consolidate, escape_markdown_characters, remove_trailing_whitespace
 
 
-def test_read_alloyignore(project_root, mock_operations):  # pylint: disable=unused-argument
+def test_consolidate_excludes_ignored_files(
+    project_root, mock_project, mock_operations
+):  # pylint: disable=unused-argument
+    codebase, _, _, _ = consolidate(project_root)
+    codebaseignore = mock_project[os.path.join(project_root, ".codebaseignore")]
 
-    exclude = read_alloyignore(project_root, [])
-
-    assert exclude("test.png") is True
-    assert exclude("test.svg") is True
-
-    assert exclude("test.md") is False
-    assert exclude("test.txt") is False
-    assert exclude("test.py") is False
-    assert exclude("test.yml") is False
-
-
-def test_consolidate_removes_trailing_whitespace():
-    input_content = "trailing whitespace         "
-    expected_output = "trailing whitespace"
-
-    output = remove_trailing_whitespace(input_content)
-
-    assert output == expected_output
-    assert not re.search(r"\n{3,}", output)
-    assert not re.search(r" +$", output, re.MULTILINE)
-
-
-def test_consolidate_excludes_png_files(project_root, mock_project, mock_operations):  # pylint: disable=unused-argument
-    codebase = consolidate(project_root)
-
-    assert ".png" in mock_project[os.path.join(project_root, ".alloyignore")]
+    assert ".png" in codebaseignore
+    assert ".svg" in codebaseignore
     assert not re.search(rf"#### {re.escape(escape_markdown_characters('image.png'))}", codebase)
+    assert not re.search(rf"#### {re.escape(escape_markdown_characters('vector.svg'))}", codebase)
+
+    assert ".markdown.md" not in codebaseignore
+    assert ".python.py" not in codebaseignore
+    assert "text.txt" not in codebaseignore
+    assert re.search(rf"#### {re.escape(escape_markdown_characters('markdown.md'))}", codebase)
+    assert re.search(rf"#### {re.escape(escape_markdown_characters('python.py'))}", codebase)
+    assert re.search(rf"#### {re.escape(escape_markdown_characters('text.txt'))}", codebase)
 
 
 def test_consolidate_considers_subdirectories(
     project_root, mock_project, mock_operations
 ):  # pylint: disable=unused-argument
-    codebase = consolidate(project_root)
+    codebase, _, _, _ = consolidate(project_root)
 
     print(f"Mock project structure: {mock_project}")
     print(f"Consolidated codebase:\n{codebase}")
@@ -56,4 +45,64 @@ def test_consolidate_considers_subdirectories(
     subdir_svg_path = os.path.join("subdirectory", "vector.svg")
     assert not re.search(
         rf"#### {re.escape(escape_markdown_characters(subdir_svg_path))}", codebase
-    ), f"File {subdir_svg_path} should be excluded as per .alloyignore"
+    ), f"File {subdir_svg_path} should be excluded as per .codebaseignore"
+
+
+def test_consolidate_file_token_count(project_root, mock_project, mock_operations):  # pylint: disable=unused-argument
+    codebase, file_count, token_count, lines_of_code_count = consolidate(project_root)
+
+    expected_file_count = len(
+        [
+            f
+            for f in mock_project.keys()
+            if not f.endswith(".codebaseignore") and not f.endswith(".png") and not f.endswith(".svg")
+        ]
+    )
+
+    expected_lines_of_code_count = sum(
+        len(content.split("\n"))
+        for file_path, content in mock_project.items()
+        if not file_path.endswith((".codebaseignore", ".png", ".svg"))
+    )
+
+    assert file_count == expected_file_count
+    assert token_count > 0
+    assert lines_of_code_count == expected_lines_of_code_count
+
+    for file_path, content in mock_project.items():
+        if not file_path.endswith((".codebaseignore", ".png", ".svg")):
+            escaped_path = escape_markdown_characters(os.path.relpath(file_path, project_root))
+            assert re.search(rf"#### {re.escape(escaped_path)}", codebase)
+            assert content in codebase
+
+
+def test_consolidate_removes_trailing_whitespace():
+    input_content = "trailing whitespace         "
+    expected_output = "trailing whitespace"
+
+    output = remove_trailing_whitespace(input_content)
+
+    assert output == expected_output
+    assert not re.search(r"\n{3,}", output)
+    assert not re.search(r" +$", output, re.MULTILINE)
+
+
+def test_remove_trailing_whitespace_multiple_newlines():
+    input_content = "test\n\n\n\ntest\n\n\n"
+    expected_output = "test\n\ntest\n\n"
+    assert remove_trailing_whitespace(input_content) == expected_output
+
+
+@pytest.mark.parametrize(
+    "file, expected",
+    [
+        ("normal.py", "normal\\.py"),
+        ("__init__.py", "\\_\\_init\\_\\_\\.py"),
+        ("test-[file].md", "test\\-\\[file\\]\\.md"),
+        ("test_file.txt", "test\\_file\\.txt"),
+        ("!important.test", "\\!important\\.test"),
+        ("(test).js", "\\(test\\)\\.js"),
+    ],
+)
+def test_escape_markdown_characters(file, expected):
+    assert escape_markdown_characters(file) == expected

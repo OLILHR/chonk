@@ -1,0 +1,60 @@
+.bmp
+.eps
+.gif
+.ico
+.jpeg
+.jpg
+.pdf
+.png
+.svg
+.tiff
+
+.env
+.env.*
+*.env
+
+.github/
+.gitignore
+.gitattributes
+.gitmodules
+
+htmlcov/
+
+.pdm-build/
+pdm.lock
+__pycache__
+.pytest_cache
+py.typed
+.mypy_cache
+.tox/
+tox.ini
+
+package.json
+package-lock.json
+
+dev_requirements/
+requirements.in
+requirements.txt
+
+LICENSE
+README.md
+
+# DEFAULT_IGNORE_LIST = [
+#     ".cache/",
+#     ".coverage",
+#     "dist/",
+#     ".DS_Store",
+#     ".git",
+#     ".idea",
+#     "Thumbs.db",
+#     ".venv/",
+#     ".vscode/",
+#     # JS
+#     "node_modules/",
+#     # Python
+#     "*.pyc",
+#     # codebase-specific files
+#     ".codebaseignore",
+#     ".codebaseignore.example",
+#     "codebase.md",
+# ]
