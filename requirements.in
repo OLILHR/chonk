@@ -1,3 +1,5 @@
 click
 prompt_toolkit
 tiktoken
+tqdm
+types-tqdm

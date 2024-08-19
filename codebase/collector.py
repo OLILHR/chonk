@@ -1,8 +1,10 @@
 import logging
 import os
 import re
+from collections import Counter
 
 import tiktoken
+from tqdm import tqdm
 
 from .filter import filter_extensions, read_codebaseignore
 
@@ -26,11 +28,31 @@ def escape_markdown_characters(file_name):
 
 def count_lines_of_code(content):
     """
-    Count the lines of code within code blocks in the markdown content.
+    Counts the lines of code within each code blocks in the output markdown file.
     """
     codeblocks = re.findall(r"```[\s\S]*?```", content)
     lines_of_code = sum(len(block.split("\n")) - 2 for block in codeblocks)  # subtracts 2x ``` from codeblocks
     return lines_of_code
+
+
+def get_file_type_distribution(markdown_content):
+    """
+    Returns a distribution of the four most common file types in the output markdown file.
+    """
+    file_types = [line.split(".")[-1] for line in markdown_content.split("\n") if line.startswith("####")]
+    type_counter = Counter(file_types)
+    total_files = len(file_types)
+
+    most_common_types = type_counter.most_common(4)
+    type_distribution = [(file_type, count / total_files * 100) for file_type, count in most_common_types]
+
+    if len(type_counter) > 4:
+        other_count = sum(
+            count for file_type, count in type_counter.items() if file_type not in dict(most_common_types)
+        )
+        type_distribution.append(("other", other_count / total_files * 100))
+
+    return type_distribution
 
 
 def count_tokens(text):
@@ -56,33 +78,48 @@ def consolidate(path, extensions=None):
 
     for root, dirs, files in os.walk(path):
         dirs[:] = [d for d in dirs if not exclude_files(os.path.relpath(str(os.path.join(root, d)), path))]
+        file_count += sum(
+            1 for file in files if not exclude_files(os.path.relpath(str(os.path.join(root, file)), path))
+        )
 
-        for file in files:
-            file_path = os.path.join(root, file)
-            relative_path = os.path.relpath(str(file_path), path)
+    with tqdm(
+        total=file_count,
+        unit="file",
+        ncols=100,
+        bar_format="▶️ | {desc}: {bar:45} {percentage:3.0f}% | {n_fmt}/{total_fmt}",
+    ) as progress_bar:
+        for root, dirs, files in os.walk(path):
+            dirs[:] = [d for d in dirs if not exclude_files(os.path.relpath(str(os.path.join(root, d)), path))]
 
-            if (extensions and not filter_extensions(file_path, extensions)) or exclude_files(relative_path):
-                continue
-            _, file_extension = os.path.splitext(file)
+            for file in files:
+                file_path = os.path.join(root, file)
+                relative_path = os.path.relpath(str(file_path), path)
 
-            try:
-                with open(file_path, "r", encoding="utf-8") as f:
-                    content = f.read()
-            except UnicodeDecodeError:
-                try:
-                    with open(file_path, "r", encoding="iso-8859-1") as f:
-                        content = f.read()
-                except (OSError, IOError) as e:
-                    _logger.warning("Unable to read %s: %s. Skipping this file.", file_path, str(e))
+                if (extensions and not filter_extensions(file_path, extensions)) or exclude_files(relative_path):
                     continue
 
-            escaped_relative_path = escape_markdown_characters(relative_path)
-            file_content = f"\n#### {escaped_relative_path}\n\n```{file_extension[1:]}\n{content.rstrip()}\n```\n"
-            codebase += file_content
-            file_count += 1
-            token_count += count_tokens(file_content)
-            lines_of_code_count += len(content.split("\n"))
+                _, file_extension = os.path.splitext(file)
+
+                try:
+                    with open(file_path, "r", encoding="utf-8") as f:
+                        content = f.read()
+                except UnicodeDecodeError:
+                    try:
+                        with open(file_path, "r", encoding="iso-8859-1") as f:
+                            content = f.read()
+                    except (OSError, IOError) as e:
+                        _logger.warning("Unable to read %s: %s. Skipping this file.", file_path, str(e))
+                        continue
+
+                escaped_relative_path = escape_markdown_characters(relative_path)
+                file_content = f"\n#### {escaped_relative_path}\n\n```{file_extension[1:]}\n{content.rstrip()}\n```\n"
+                codebase += file_content
+                token_count += count_tokens(file_content)
+                lines_of_code_count += len(content.split("\n"))
+
+                progress_bar.update(1)
 
     codebase = remove_trailing_whitespace(codebase)
+    type_distribution = get_file_type_distribution(codebase)
 
-    return codebase, file_count, token_count, lines_of_code_count
+    return codebase, file_count, token_count, lines_of_code_count, type_distribution

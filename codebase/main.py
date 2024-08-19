@@ -69,6 +69,7 @@ def path_prompt(message, default, exists=False):
     multiple=True,
     help="enables optional filtering by extensions, for instance: -f py,json",  # markdown contains only .py/.json files
 )
+# pylint: disable=too-many-locals
 def generate_markdown(input_path, output_path, extension_filter):
     no_flags_provided = input_path is None and output_path is None and not extension_filter
     project_root = get_project_root()
@@ -94,7 +95,9 @@ def generate_markdown(input_path, output_path, extension_filter):
             extensions = parse_extensions(None, None, [extensions_input])
 
     extensions = list(extensions) if extensions else None
-    markdown_content, file_count, lines_of_code_count, token_count = consolidate(input_path, extensions)
+    markdown_content, file_count, token_count, lines_of_code_count, type_distribution = consolidate(
+        input_path, extensions
+    )
 
     if len(markdown_content.encode("utf-8")) > MAX_FILE_SIZE:
         _logger.error(
@@ -116,9 +119,13 @@ def generate_markdown(input_path, output_path, extension_filter):
     else:
         file_size = f"{codebase_size / (1024 * 1024):.2f} MB"
 
+    file_type_distribution = " ".join(
+        f".{file_type} ({percentage:.0f}%)" for file_type, percentage in type_distribution
+    )
+
     _logger.info(
         "\n"
-        + "🟢 CODEBASE CONSOLIDATED SUCCESSFULLY \n"
+        + "🟢 CODEBASE CONSOLIDATED SUCCESSFULLY.\n"
         + "\n"
         + "📁 MARKDOWN FILE LOCATION: %s"
         + "\n"
@@ -126,17 +133,22 @@ def generate_markdown(input_path, output_path, extension_filter):
         + "\n"
         + "📄 FILES PROCESSED: %d"
         + "\n"
-        + "📊 LINES OF CODE: %d"
+        + "📊 TYPE DISTRIBUTION: %s"
+        + "\n"
+        + "📈 LINES OF CODE: %d"
         + "\n"
         + "🪙 TOKEN COUNT: %d"
         + "\n",
         codebase,
         file_size,
         file_count,
+        file_type_distribution,
         lines_of_code_count,
         token_count,
     )
 
 
+# to run the script during local development, either execute $ python -m codebase
+# or install codebase locally via `pdm install` and simply run $ codebase
 if __name__ == "__main__":
     generate_markdown.main(standalone_mode=False)

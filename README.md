@@ -1,6 +1,6 @@
 <div align="center">
 
-<img width="80%" src="codebase.svg" alt="codebase.svg"><br>
+<img width="75%" src="codebase.svg" alt="codebase.svg"><br>
 
 <p>data consolidation tool.</p>
 

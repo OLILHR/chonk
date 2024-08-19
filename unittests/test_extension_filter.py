@@ -8,7 +8,7 @@ from codebase.filter import filter_extensions, parse_extensions
 def test_consolidate_only_specified_filters(
     project_root, mock_project, mock_operations, mock_codebaseignore
 ):  # pylint: disable=unused-argument
-    filtered_codebase, _, _, _ = consolidate(project_root, extensions=["md", "txt"])
+    filtered_codebase, *_ = consolidate(project_root, extensions=["md", "txt"])
 
     assert not any(extension in mock_codebaseignore for extension in [".md", ".txt", ".py", ".yml"])
     assert re.search(rf"#### {re.escape(escape_markdown_characters('markdown.md'))}", filtered_codebase)
@@ -32,7 +32,7 @@ def test_consolidate_only_specified_filters(
 def test_extension_filter_bypasses_codebaseignore(
     project_root, mock_project, mock_operations, mock_codebaseignore
 ):  # pylint: disable=unused-argument
-    filtered_codebase, _, _, _ = consolidate(project_root, extensions=["svg"])
+    filtered_codebase, *_ = consolidate(project_root, extensions=["svg"])
 
     assert ".svg" in mock_codebaseignore
     assert re.search(

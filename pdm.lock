@@ -5,7 +5,7 @@
 groups = ["default"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:daaceadd1d37330a5e25c0c76057503bbc2fb4b1aa752b49c081c6e8dc0d4ffd"
+content_hash = "sha256:65392c0028c6140ab7254ba8b6d774ca9360d24a31aacc4ce906b19609d3a791"
 
 [[metadata.targets]]
 requires_python = ">=3.12"
@@ -160,6 +160,31 @@ files = [
     {file = "tiktoken-0.7.0-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:8c46d7af7b8c6987fac9b9f61041b452afe92eb087d29c9ce54951280f899a97"},
     {file = "tiktoken-0.7.0-cp312-cp312-win_amd64.whl", hash = "sha256:0bc603c30b9e371e7c4c7935aba02af5994a909fc3c0fe66e7004070858d3f8f"},
     {file = "tiktoken-0.7.0.tar.gz", hash = "sha256:1077266e949c24e0291f6c350433c6f0971365ece2b173a23bc3b9f9defef6b6"},
+]
+
+[[package]]
+name = "tqdm"
+version = "4.66.5"
+requires_python = ">=3.7"
+summary = "Fast, Extensible Progress Meter"
+groups = ["default"]
+dependencies = [
+    "colorama; platform_system == \"Windows\"",
+]
+files = [
+    {file = "tqdm-4.66.5-py3-none-any.whl", hash = "sha256:90279a3770753eafc9194a0364852159802111925aa30eb3f9d85b0e805ac7cd"},
+    {file = "tqdm-4.66.5.tar.gz", hash = "sha256:e1020aef2e5096702d8a025ac7d16b1577279c9d63f8375b63083e9a5f0fcbad"},
+]
+
+[[package]]
+name = "types-tqdm"
+version = "4.66.0.20240417"
+requires_python = ">=3.8"
+summary = "Typing stubs for tqdm"
+groups = ["default"]
+files = [
+    {file = "types-tqdm-4.66.0.20240417.tar.gz", hash = "sha256:16dce9ef522ea8d40e4f5b8d84dd8a1166eefc13ceee7a7e158bf0f1a1421a31"},
+    {file = "types_tqdm-4.66.0.20240417-py3-none-any.whl", hash = "sha256:248aef1f9986b7b8c2c12b3cb4399fc17dba0a29e7e3f3f9cd704babb879383d"},
 ]
 
 [[package]]

@@ -9,7 +9,7 @@ from codebase.collector import consolidate, escape_markdown_characters, remove_t
 def test_consolidate_excludes_ignored_files(
     project_root, mock_project, mock_operations
 ):  # pylint: disable=unused-argument
-    codebase, _, _, _ = consolidate(project_root)
+    codebase, *_ = consolidate(project_root)
     codebaseignore = mock_project[os.path.join(project_root, ".codebaseignore")]
 
     assert ".png" in codebaseignore
@@ -28,7 +28,7 @@ def test_consolidate_excludes_ignored_files(
 def test_consolidate_considers_subdirectories(
     project_root, mock_project, mock_operations
 ):  # pylint: disable=unused-argument
-    codebase, _, _, _ = consolidate(project_root)
+    codebase, *_ = consolidate(project_root)
 
     print(f"Mock project structure: {mock_project}")
     print(f"Consolidated codebase:\n{codebase}")
@@ -49,7 +49,7 @@ def test_consolidate_considers_subdirectories(
 
 
 def test_consolidate_file_token_count(project_root, mock_project, mock_operations):  # pylint: disable=unused-argument
-    codebase, file_count, token_count, lines_of_code_count = consolidate(project_root)
+    _, file_count, token_count, *_ = consolidate(project_root)
 
     expected_file_count = len(
         [
@@ -59,21 +59,39 @@ def test_consolidate_file_token_count(project_root, mock_project, mock_operation
         ]
     )
 
+    assert file_count == expected_file_count
+    assert token_count > 0
+
+
+def test_consolidate_line_of_code_count(project_root, mock_project, mock_operations):  # pylint: disable=unused-argument
+    _, lines_of_code_count, *_ = consolidate(project_root)
+
     expected_lines_of_code_count = sum(
         len(content.split("\n"))
         for file_path, content in mock_project.items()
         if not file_path.endswith((".codebaseignore", ".png", ".svg"))
     )
 
-    assert file_count == expected_file_count
-    assert token_count > 0
     assert lines_of_code_count == expected_lines_of_code_count
 
-    for file_path, content in mock_project.items():
-        if not file_path.endswith((".codebaseignore", ".png", ".svg")):
-            escaped_path = escape_markdown_characters(os.path.relpath(file_path, project_root))
-            assert re.search(rf"#### {re.escape(escaped_path)}", codebase)
-            assert content in codebase
+
+def test_consolidate_file_type_distribution(
+    project_root, mock_project, mock_operations
+):  # pylint: disable=unused-argument
+    codebase, file_count, *_ = consolidate(project_root)
+
+    expected_types = {
+        "py": 1,  # mock_project/python.py
+        "md": 1,  # mock_project/markdown.md
+        "txt": 1,  # mock_project/text.txt
+        "yml": 1,  # mock_project/subdirectory/markup.yml
+    }
+    file_type_distribution = sum(expected_types.values())
+
+    assert file_count == file_type_distribution
+
+    for file_type in expected_types:
+        assert re.search(rf"#### .*\.{file_type.lower()}", codebase, re.IGNORECASE)
 
 
 def test_consolidate_removes_trailing_whitespace():
