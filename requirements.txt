@@ -11,7 +11,9 @@ charset-normalizer==3.3.2
 click==8.1.7
     # via -r requirements.in
 colorama==0.4.6
-    # via click
+    # via
+    #   click
+    #   tqdm
 idna==3.7
     # via requests
 prompt-toolkit==3.0.47
@@ -21,6 +23,10 @@ regex==2024.7.24
 requests==2.32.3
     # via tiktoken
 tiktoken==0.7.0
+    # via -r requirements.in
+tqdm==4.66.5
+    # via -r requirements.in
+types-tqdm==4.66.0.20240417
     # via -r requirements.in
 urllib3==2.2.2
     # via requests

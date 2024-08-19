@@ -3,6 +3,7 @@ import os
 import re
 
 import tiktoken
+from tqdm import tqdm
 
 from .filter import filter_extensions, read_codebaseignore
 
@@ -54,34 +55,44 @@ def consolidate(path, extensions=None):
     token_count = 0
     lines_of_code_count = 0
 
-    for root, dirs, files in os.walk(path):
-        dirs[:] = [d for d in dirs if not exclude_files(os.path.relpath(str(os.path.join(root, d)), path))]
+    total_files = sum(len(files) for _, _, files in os.walk(path))
 
-        for file in files:
-            file_path = os.path.join(root, file)
-            relative_path = os.path.relpath(str(file_path), path)
+    with tqdm(  # inits the progress bar
+        total=total_files,
+        unit="file",
+        ncols=100,
+        bar_format="▶️ |{desc}: {bar:45} {percentage:3.0f}%| {n_fmt}/{total_fmt}",
+    ) as progress_bar:
+        for root, dirs, files in os.walk(path):
+            dirs[:] = [d for d in dirs if not exclude_files(os.path.relpath(str(os.path.join(root, d)), path))]
 
-            if (extensions and not filter_extensions(file_path, extensions)) or exclude_files(relative_path):
-                continue
-            _, file_extension = os.path.splitext(file)
+            for file in files:
+                file_path = os.path.join(root, file)
+                relative_path = os.path.relpath(str(file_path), path)
 
-            try:
-                with open(file_path, "r", encoding="utf-8") as f:
-                    content = f.read()
-            except UnicodeDecodeError:
-                try:
-                    with open(file_path, "r", encoding="iso-8859-1") as f:
-                        content = f.read()
-                except (OSError, IOError) as e:
-                    _logger.warning("Unable to read %s: %s. Skipping this file.", file_path, str(e))
+                if (extensions and not filter_extensions(file_path, extensions)) or exclude_files(relative_path):
                     continue
+                _, file_extension = os.path.splitext(file)
 
-            escaped_relative_path = escape_markdown_characters(relative_path)
-            file_content = f"\n#### {escaped_relative_path}\n\n```{file_extension[1:]}\n{content.rstrip()}\n```\n"
-            codebase += file_content
-            file_count += 1
-            token_count += count_tokens(file_content)
-            lines_of_code_count += len(content.split("\n"))
+                try:
+                    with open(file_path, "r", encoding="utf-8") as f:
+                        content = f.read()
+                except UnicodeDecodeError:
+                    try:
+                        with open(file_path, "r", encoding="iso-8859-1") as f:
+                            content = f.read()
+                    except (OSError, IOError) as e:
+                        _logger.warning("Unable to read %s: %s. Skipping this file.", file_path, str(e))
+                        continue
+
+                escaped_relative_path = escape_markdown_characters(relative_path)
+                file_content = f"\n#### {escaped_relative_path}\n\n```{file_extension[1:]}\n{content.rstrip()}\n```\n"
+                codebase += file_content
+                file_count += 1
+                token_count += count_tokens(file_content)
+                lines_of_code_count += len(content.split("\n"))
+
+                progress_bar.update(1)
 
     codebase = remove_trailing_whitespace(codebase)
 
