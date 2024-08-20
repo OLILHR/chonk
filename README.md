@@ -2,9 +2,9 @@
 
 <img width="75%" src="codebase.svg" alt="codebase.svg"><br>
 
-<p>data consolidation tool.</p>
+<p>🧊 data consolidation.</p>
 
-![PyPI status badge](https://img.shields.io/pypi/v/alloy?labelColor=fff8e7&color=fccccc)
+![PyPI status badge](https://img.shields.io/pypi/v/alloy?labelColor=30363D&color=fccccc)
 ![Unittests status badge](https://github.com/OLILHR/codebase/workflows/Unittests/badge.svg)
 ![Coverage status badge](https://github.com/OLILHR/codebase/workflows/Coverage/badge.svg)
 ![Pylint status badge](https://github.com/OLILHR/codebase/workflows/Linting/badge.svg)
@@ -15,7 +15,7 @@
 ## ℹ️ Installation
 
 ```sh
-pip install git+https://github.com/OLILHR/codebase.git
+$ pip install codebase
 ```
 
 > [!NOTE]
@@ -26,7 +26,7 @@ pip install git+https://github.com/OLILHR/codebase.git
 To execute the script, simply run
 
 ```sh
-codebase
+$ codebase
 ```
 
 and follow the prompts by providing an input directory, an output file destination and optional filters.
@@ -34,7 +34,7 @@ and follow the prompts by providing an input directory, an output file destinati
 Alternatively, the script can also be executed using a single command with the appropriate flags:  
 
 ```sh
-codebase -i <input_path> -o <output_path> -f <(optional) filters>
+$ codebase -i <input_path> -o <output_path> -f <(optional) filters>
 ```
 
 For further information, run `$ codebase --help`.
