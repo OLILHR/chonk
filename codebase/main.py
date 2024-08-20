@@ -76,7 +76,7 @@ class CaseInsensitivePathCompleter(Completer):
 
 def path_prompt(message, default, exists=False):
     """
-    Enables basic shell features, like case-insensitive autocompletion, for CLI prompts.
+    Enables basic shell features, like relative path suggestion and autocompletion, for CLI prompts.
     """
     path_completer = CaseInsensitivePathCompleter()
 
