@@ -7,7 +7,7 @@ from prompt_toolkit import prompt
 from prompt_toolkit.completion import Completer, Completion
 
 from .filter import parse_extensions
-from .utilities import consolidate
+from .utilities import NoMatchingExtensionError, consolidate
 
 GLOBAL_LOG_LEVEL = logging.INFO
 logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -120,7 +120,7 @@ def generate_markdown(input_path, output_path, extension_filter):
     extensions = extension_filter
     if no_flags_provided:
         extensions_input = click.prompt(
-            "🔎 (OPTIONAL) FILTER FOR SPECIFIC EXTENSIONS (COMMA-SEPARATED)",
+            "🔎 OPTIONAL FILTER FOR SPECIFIC EXTENSIONS (COMMA-SEPARATED)",
             default="",
             show_default=False,
         )
@@ -128,9 +128,15 @@ def generate_markdown(input_path, output_path, extension_filter):
             extensions = parse_extensions(None, None, [extensions_input])
 
     extensions = list(extensions) if extensions else None
-    markdown_content, file_count, token_count, lines_of_code_count, type_distribution = consolidate(
-        input_path, extensions
-    )
+
+    try:
+        markdown_content, file_count, token_count, lines_of_code_count, type_distribution = consolidate(
+            input_path, extensions
+        )
+    except NoMatchingExtensionError:
+        _logger.error("\n⚠️ NO FILES MATCH THE SPECIFIED EXTENSION(S) - PLEASE REVIEW YOUR .codebaseignore FILE.")
+        _logger.error("🔴 NO MARKDOWN FILE GENERATED.\n")
+        return
 
     if len(markdown_content.encode("utf-8")) > MAX_FILE_SIZE:
         _logger.error(

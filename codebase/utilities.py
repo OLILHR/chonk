@@ -2,6 +2,7 @@ import logging
 import os
 import re
 from collections import Counter
+from dataclasses import dataclass
 
 import tiktoken
 from tqdm import tqdm
@@ -63,6 +64,15 @@ def count_tokens(text):
     return len(encoding.encode(text))
 
 
+@dataclass
+class NoMatchingExtensionError(Exception):
+    """
+    Raised when no files match the specified extensions (optional filter argument).
+    """
+
+    exception: str
+
+
 # pylint: disable=too-many-locals
 def consolidate(path, extensions=None):
     """
@@ -76,13 +86,18 @@ def consolidate(path, extensions=None):
     token_count = 0
     lines_of_code_count = 0
 
+    matching_filter_extensions = []
     for root, dirs, files in os.walk(path):
         dirs[:] = [d for d in dirs if not exclude_files(os.path.relpath(str(os.path.join(root, d)), path))]
         for file in files:
             file_path = os.path.join(root, file)
             relative_path = os.path.relpath(str(file_path), path)
             if not exclude_files(relative_path) and (not extensions or filter_extensions(file_path, extensions)):
+                matching_filter_extensions.append(file_path)
                 file_count += 1
+
+    if not matching_filter_extensions:
+        raise NoMatchingExtensionError("⚠️ NO FILES MATCH THE SPECIFIED EXTENSIONS.")
 
     with tqdm(
         total=file_count,
@@ -90,36 +105,28 @@ def consolidate(path, extensions=None):
         ncols=100,
         bar_format="▶️ | {desc}: {bar:45} {percentage:3.0f}% | {n_fmt}/{total_fmt}",
     ) as progress_bar:
-        for root, dirs, files in os.walk(path):
-            dirs[:] = [d for d in dirs if not exclude_files(os.path.relpath(str(os.path.join(root, d)), path))]
+        for file_path in matching_filter_extensions:
+            relative_path = os.path.relpath(str(file_path), path)
+            _, file_extension = os.path.splitext(file_path)
 
-            for file in files:
-                file_path = os.path.join(root, file)
-                relative_path = os.path.relpath(str(file_path), path)
-
-                if exclude_files(relative_path) or (extensions and not filter_extensions(file_path, extensions)):
+            try:
+                with open(file_path, "r", encoding="utf-8") as f:
+                    content = f.read()
+            except UnicodeDecodeError:
+                try:
+                    with open(file_path, "r", encoding="iso-8859-1") as f:
+                        content = f.read()
+                except (OSError, IOError) as e:
+                    _logger.warning(file_path, str(e))
                     continue
 
-                _, file_extension = os.path.splitext(file)
+            escaped_relative_path = escape_markdown_characters(relative_path)
+            file_content = f"\n#### {escaped_relative_path}\n\n```{file_extension[1:]}\n{content.rstrip()}\n```\n"
+            codebase += file_content
+            token_count += count_tokens(file_content)
+            lines_of_code_count += len(content.split("\n"))
 
-                try:
-                    with open(file_path, "r", encoding="utf-8") as f:
-                        content = f.read()
-                except UnicodeDecodeError:
-                    try:
-                        with open(file_path, "r", encoding="iso-8859-1") as f:
-                            content = f.read()
-                    except (OSError, IOError) as e:
-                        _logger.warning("Unable to read %s: %s. Skipping this file.", file_path, str(e))
-                        continue
-
-                escaped_relative_path = escape_markdown_characters(relative_path)
-                file_content = f"\n#### {escaped_relative_path}\n\n```{file_extension[1:]}\n{content.rstrip()}\n```\n"
-                codebase += file_content
-                token_count += count_tokens(file_content)
-                lines_of_code_count += len(content.split("\n"))
-
-                progress_bar.update(1)
+            progress_bar.update(1)
 
     codebase = remove_trailing_whitespace(codebase)
     type_distribution = get_file_type_distribution(codebase)
