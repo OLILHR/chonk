@@ -1,6 +1,6 @@
 <div align="center">
 
-<img width="75%" src="https://raw.githubusercontent.com/OLILHR/epitaxy/main/epitaxy.svg" alt="epitaxy.svg"><br>
+<img width="85%" src="https://raw.githubusercontent.com/OLILHR/epitaxy/main/epitaxy.svg" alt="epitaxy.svg"><br>
 
 <p>🧊 codebase consolidation.</p>
 
@@ -19,7 +19,7 @@ $ pip install epitaxy
 ```
 
 > [!NOTE]
-> It is generally recommended to add a `.epitaxyignore` file to the root directory of the epitaxy you'd like to consolidate.
+> It is generally recommended to add an `.epitaxyignore` file to the root directory of the codebase you'd like to consolidate.
 > All files, folders and file extensions specified in `.epitaxyignore` will be excluded from the output file.
 > Please refer to the `.epitaxyignore.example` for suggestions regarding what to include in `.epitaxyignore`.
 
@@ -31,7 +31,7 @@ $ epitaxy
 
 and follow the prompts by providing an input directory, an output file destination and optional filters.
 
-Alternatively, the script can also be executed using a single command with the appropriate flags:  
+Alternatively, the script can be executed using a single command with the appropriate flags:  
 
 ```sh
 $ epitaxy -i <input_path> -o <output_path> -f <(optional) filters>
