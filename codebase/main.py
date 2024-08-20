@@ -5,8 +5,8 @@ import click
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import PathCompleter
 
-from .collector import consolidate
 from .filter import parse_extensions
+from .utilities import consolidate
 
 GLOBAL_LOG_LEVEL = logging.INFO
 logging.basicConfig(level=logging.INFO, format="%(message)s")
