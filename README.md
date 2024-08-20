@@ -1,6 +1,6 @@
 <div align="center">
 
-<img width="75%" src="codebase.svg" alt="codebase.svg"><br>
+<img width="75%" src="https://raw.githubusercontent.com/OLILHR/codebase/main/codebase.svg" alt="codebase.svg"><br>
 
 <p>🧊 data consolidation.</p>
 
