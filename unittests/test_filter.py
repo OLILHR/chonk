@@ -29,7 +29,7 @@ def test_consolidate_only_specified_filters(
     )
 
 
-def test_extension_filter_bypasses_epitaxyignore(
+def test_filter_bypasses_epitaxyignore(
     project_root, mock_project, mock_operations, mock_epitaxyignore
 ):  # pylint: disable=unused-argument
     filtered_codebase, *_ = consolidate(project_root, extensions=["svg"])

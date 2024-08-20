@@ -75,9 +75,7 @@ def parse_extensions(_csx, _param, value):
     Converts a comma-separated string of file extensions into a list of individual extensions, which - in turn - is
     parsed to the main function to filter files during the consolidation process.
     """
-    if not value:
-        return None
-    return [ext.strip() for item in value for ext in item.split(",")]
+    return [ext.strip() for item in value for ext in item.split(",")] if value else None
 
 
 DEFAULT_IGNORE_LIST = [

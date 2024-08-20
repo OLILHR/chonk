@@ -66,7 +66,7 @@ class CaseInsensitivePathCompleter(Completer):
             if suggestion.lower().startswith(prefix.lower()):
                 if self.only_directories and not os.path.isdir(os.path.join(full_directory, suggestion)):
                     continue
-                yield Completion(suggestion[len(prefix):], start_position=0, display=suggestion)
+                yield Completion(suggestion[len(prefix) :], start_position=0, display=suggestion)
 
 
 def path_prompt(message, default, exists=False):
