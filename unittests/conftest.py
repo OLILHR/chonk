@@ -80,4 +80,4 @@ def mock_operations(monkeypatch, mock_project):
     monkeypatch.setattr("tiktoken.get_encoding", mock_tiktoken.get_encoding)
 
     # Mock the entire tiktoken module
-    monkeypatch.setattr("codebase.collector.tiktoken", mock_tiktoken)
+    monkeypatch.setattr("codebase.utilities.tiktoken", mock_tiktoken)

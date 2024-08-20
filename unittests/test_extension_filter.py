@@ -1,8 +1,8 @@
 import os
 import re
 
-from codebase.collector import consolidate, escape_markdown_characters
 from codebase.filter import filter_extensions, parse_extensions
+from codebase.utilities import consolidate, escape_markdown_characters
 
 
 def test_consolidate_only_specified_filters(

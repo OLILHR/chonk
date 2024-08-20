@@ -1,12 +1,13 @@
 import logging
 import os
+from dataclasses import dataclass
 
 import click
 from prompt_toolkit import prompt
-from prompt_toolkit.completion import PathCompleter
+from prompt_toolkit.completion import Completer, Completion
 
-from .collector import consolidate
 from .filter import parse_extensions
+from .utilities import consolidate
 
 GLOBAL_LOG_LEVEL = logging.INFO
 logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -41,21 +42,53 @@ def get_project_root():
     return os.getcwd()
 
 
+@dataclass
+class CaseInsensitivePathCompleter(Completer):
+    only_directories: bool = False
+    expanduser: bool = True
+
+    def get_completions(self, document, complete_event):
+        text = document.text_before_cursor
+        if len(text) == 0:
+            return
+
+        directory = os.path.dirname(text)
+        prefix = os.path.basename(text)
+
+        if os.path.isabs(text):
+            full_directory = os.path.abspath(directory)
+        else:
+            full_directory = os.path.abspath(os.path.join(os.getcwd(), directory))
+
+        try:
+            suggestions = os.listdir(full_directory)
+        except OSError:
+            return
+
+        for suggestion in suggestions:
+            if suggestion.lower().startswith(prefix.lower()):
+                if self.only_directories and not os.path.isdir(os.path.join(full_directory, suggestion)):
+                    continue
+                completion = suggestion[len(prefix) :]  # noqa: E203
+                display = suggestion
+                yield Completion(completion, start_position=0, display=display)
+
+
 def path_prompt(message, default, exists=False):
     """
-    Enables basic shell features, like autocompletion, for CLI prompts.
+    Enables basic shell features, like relative path suggestion and autocompletion, for CLI prompts.
     """
-    path_completer = PathCompleter(only_directories=False, expanduser=True)
+    path_completer = CaseInsensitivePathCompleter()
 
     if not default.endswith(os.path.sep):
         default += os.path.sep
 
     while True:
         path = prompt(f"{message} ", default=default, completer=path_completer)
-        path = os.path.abspath(os.path.expanduser(path))
-        if not exists or os.path.exists(path):
-            return path
-        print(f"🔴 {path} DOES NOT EXIST.")
+        full_path = os.path.abspath(os.path.expanduser(path))
+        if not exists or os.path.exists(full_path):
+            return full_path
+        print(f"🔴 {full_path} DOES NOT EXIST.")
 
 
 @click.command()
