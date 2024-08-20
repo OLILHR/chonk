@@ -78,9 +78,11 @@ def consolidate(path, extensions=None):
 
     for root, dirs, files in os.walk(path):
         dirs[:] = [d for d in dirs if not exclude_files(os.path.relpath(str(os.path.join(root, d)), path))]
-        file_count += sum(
-            1 for file in files if not exclude_files(os.path.relpath(str(os.path.join(root, file)), path))
-        )
+        for file in files:
+            file_path = os.path.join(root, file)
+            relative_path = os.path.relpath(str(file_path), path)
+            if not exclude_files(relative_path) and (not extensions or filter_extensions(file_path, extensions)):
+                file_count += 1
 
     with tqdm(
         total=file_count,
@@ -95,7 +97,7 @@ def consolidate(path, extensions=None):
                 file_path = os.path.join(root, file)
                 relative_path = os.path.relpath(str(file_path), path)
 
-                if (extensions and not filter_extensions(file_path, extensions)) or exclude_files(relative_path):
+                if exclude_files(relative_path) or (extensions and not filter_extensions(file_path, extensions)):
                     continue
 
                 _, file_extension = os.path.splitext(file)
