@@ -16,6 +16,6 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
-# coodebase-specific files
-.codebaseignore
-codebase.md
+# epitaxy-specific files
+.epitaxyignore
+epitaxy.md

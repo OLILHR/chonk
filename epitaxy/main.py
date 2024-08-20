@@ -88,7 +88,7 @@ def path_prompt(message, default, exists=False):
         full_path = os.path.abspath(os.path.expanduser(path))
         if not exists or os.path.exists(full_path):
             return full_path
-        print(f"🔴 {full_path} DOES NOT EXIST.")
+        logging.error("🔴 %s DOES NOT EXIST.", full_path)
 
 
 @click.command()
@@ -134,29 +134,27 @@ def generate_markdown(input_path, output_path, extension_filter):
             input_path, extensions
         )
     except NoMatchingExtensionError:
-        _logger.error("\n⚠️ NO FILES MATCH THE SPECIFIED EXTENSION(S) - PLEASE REVIEW YOUR .codebaseignore FILE.")
+        _logger.error("\n⚠️ NO FILES MATCH THE SPECIFIED EXTENSION(S) - PLEASE REVIEW YOUR .epitaxyignore FILE.")
         _logger.error("🔴 NO MARKDOWN FILE GENERATED.\n")
         return
 
     if len(markdown_content.encode("utf-8")) > MAX_FILE_SIZE:
-        _logger.error(
-            "\n" + "🔴 GENERATED CONTENT EXCEEDS 10 MB. CONSIDER ADDING LARGER FILES TO YOUR .codebaseignore."
-        )
+        _logger.error("\n" + "🔴 GENERATED CONTENT EXCEEDS 10 MB. CONSIDER ADDING LARGER FILES TO YOUR .epitaxyignore.")
         return
 
-    codebase = os.path.join(output_path, "codebase.md")
+    epitaxy = os.path.join(output_path, "epitaxy.md")
 
     os.makedirs(output_path, exist_ok=True)
-    with open(codebase, "w", encoding="utf-8") as f:
+    with open(epitaxy, "w", encoding="utf-8") as f:
         f.write(markdown_content)
 
-    codebase_size = os.path.getsize(codebase)
-    if codebase_size < 1024:
-        file_size = f"{codebase_size} bytes"
-    elif codebase_size < 1024 * 1024:
-        file_size = f"{codebase_size / 1024:.2f} KB"
+    epitaxy_size = os.path.getsize(epitaxy)
+    if epitaxy_size < 1024:
+        file_size = f"{epitaxy_size} bytes"
+    elif epitaxy_size < 1024 * 1024:
+        file_size = f"{epitaxy_size / 1024:.2f} KB"
     else:
-        file_size = f"{codebase_size / (1024 * 1024):.2f} MB"
+        file_size = f"{epitaxy_size / (1024 * 1024):.2f} MB"
 
     file_type_distribution = " ".join(
         f".{file_type} ({percentage:.0f}%)" for file_type, percentage in type_distribution
@@ -178,7 +176,7 @@ def generate_markdown(input_path, output_path, extension_filter):
         + "\n"
         + "🪙 TOKEN COUNT: %d"
         + "\n",
-        codebase,
+        epitaxy,
         file_size,
         file_count,
         file_type_distribution,
@@ -187,7 +185,7 @@ def generate_markdown(input_path, output_path, extension_filter):
     )
 
 
-# to run the script during local development, either execute $ python -m codebase
-# or install codebase locally via `pdm install` and simply run $ codebase
+# to run the script during local development, either execute $ python -m epitaxy
+# or install epitaxy locally via `pdm install` and simply run $ epitaxy
 if __name__ == "__main__":
     generate_markdown.main(standalone_mode=False)

@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import tiktoken
 from tqdm import tqdm
 
-from .filter import filter_extensions, read_codebaseignore
+from .filter import filter_extensions, read_epitaxyignore
 
 _logger = logging.getLogger(__name__)
 
@@ -77,11 +77,11 @@ class NoMatchingExtensionError(Exception):
 def consolidate(path, extensions=None):
     """
     Gathers and formats the content and metadata of all files inside a provided input directory,
-    while taking into account optional extension filters as well as .codebaseignore specific exceptions.
+    while taking into account optional extension filters as well as .epitaxyignore specific exceptions.
     """
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    exclude_files = read_codebaseignore(project_root, extensions)
-    codebase = ""
+    exclude_files = read_epitaxyignore(project_root, extensions)
+    epitaxy = ""
     file_count = 0
     token_count = 0
     lines_of_code_count = 0
@@ -122,13 +122,13 @@ def consolidate(path, extensions=None):
 
             escaped_relative_path = escape_markdown_characters(relative_path)
             file_content = f"\n#### {escaped_relative_path}\n\n```{file_extension[1:]}\n{content.rstrip()}\n```\n"
-            codebase += file_content
+            epitaxy += file_content
             token_count += count_tokens(file_content)
             lines_of_code_count += len(content.split("\n"))
 
             progress_bar.update(1)
 
-    codebase = remove_trailing_whitespace(codebase)
-    type_distribution = get_file_type_distribution(codebase)
+    epitaxy = remove_trailing_whitespace(epitaxy)
+    type_distribution = get_file_type_distribution(epitaxy)
 
-    return codebase, file_count, token_count, lines_of_code_count, type_distribution
+    return epitaxy, file_count, token_count, lines_of_code_count, type_distribution

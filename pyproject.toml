@@ -1,5 +1,5 @@
 [project]
-name = "codebase"
+name = "epitaxy"
 description = "codebase consolidation tool"
 license = { file = "LICENSE" }
 requires-python = ">=3.12"
@@ -26,11 +26,11 @@ dynamic = ["version"]
 readme = "README.md"
 
 [project.urls]
-Changelog = "https://github.com/OLILHR/codebase/releases"
-Homepage = "https://github.com/OLILHR/codebase"
+Changelog = "https://github.com/OLILHR/epitaxy/releases"
+Homepage = "https://github.com/OLILHR/epitaxy"
 
 [project.scripts]
-codebase = "codebase.main:generate_markdown"
+epitaxy = "epitaxy.main:generate_markdown"
 
 [build-system]
 requires = ["pdm-backend"]
@@ -40,7 +40,7 @@ build-backend = "pdm.backend"
 source = "scm"
 
 [tool.pdm.build]
-includes = ["codebase"]
+includes = ["epitaxy"]
 excludes = ["/unittests"]
 
 [tool.pdm.readme]

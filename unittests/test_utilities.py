@@ -3,49 +3,42 @@ import re
 
 import pytest
 
-from codebase.utilities import consolidate, escape_markdown_characters, remove_trailing_whitespace
+from epitaxy.utilities import consolidate, escape_markdown_characters, remove_trailing_whitespace
 
 
 def test_consolidate_excludes_ignored_files(
     project_root, mock_project, mock_operations
 ):  # pylint: disable=unused-argument
-    codebase, *_ = consolidate(project_root)
-    codebaseignore = mock_project[os.path.join(project_root, ".codebaseignore")]
+    epitaxy, *_ = consolidate(project_root)
+    epitaxyignore = mock_project[os.path.join(project_root, ".epitaxyignore")]
 
-    assert ".png" in codebaseignore
-    assert ".svg" in codebaseignore
-    assert not re.search(rf"#### {re.escape(escape_markdown_characters('image.png'))}", codebase)
-    assert not re.search(rf"#### {re.escape(escape_markdown_characters('vector.svg'))}", codebase)
+    assert ".png" in epitaxyignore
+    assert ".svg" in epitaxyignore
+    assert not re.search(rf"#### {re.escape(escape_markdown_characters('image.png'))}", epitaxy)
+    assert not re.search(rf"#### {re.escape(escape_markdown_characters('vector.svg'))}", epitaxy)
 
-    assert ".markdown.md" not in codebaseignore
-    assert ".python.py" not in codebaseignore
-    assert "text.txt" not in codebaseignore
-    assert re.search(rf"#### {re.escape(escape_markdown_characters('markdown.md'))}", codebase)
-    assert re.search(rf"#### {re.escape(escape_markdown_characters('python.py'))}", codebase)
-    assert re.search(rf"#### {re.escape(escape_markdown_characters('text.txt'))}", codebase)
+    assert ".markdown.md" not in epitaxyignore
+    assert ".python.py" not in epitaxyignore
+    assert "text.txt" not in epitaxyignore
+    assert re.search(rf"#### {re.escape(escape_markdown_characters('markdown.md'))}", epitaxy)
+    assert re.search(rf"#### {re.escape(escape_markdown_characters('python.py'))}", epitaxy)
+    assert re.search(rf"#### {re.escape(escape_markdown_characters('text.txt'))}", epitaxy)
 
 
 def test_consolidate_considers_subdirectories(
     project_root, mock_project, mock_operations
 ):  # pylint: disable=unused-argument
-    codebase, *_ = consolidate(project_root)
+    epitaxy, *_ = consolidate(project_root)
 
-    print(f"Mock project structure: {mock_project}")
-    print(f"Consolidated codebase:\n{codebase}")
-
-    assert re.search(rf"#### {re.escape(escape_markdown_characters('markdown.md'))}", codebase)
-    assert re.search(rf"#### {re.escape(escape_markdown_characters('text.txt'))}", codebase)
-    assert re.search(rf"#### {re.escape(escape_markdown_characters('python.py'))}", codebase)
+    assert re.search(rf"#### {re.escape(escape_markdown_characters('markdown.md'))}", epitaxy)
+    assert re.search(rf"#### {re.escape(escape_markdown_characters('text.txt'))}", epitaxy)
+    assert re.search(rf"#### {re.escape(escape_markdown_characters('python.py'))}", epitaxy)
 
     subdir_yml_path = os.path.join("subdirectory", "markup.yml")
-    assert re.search(
-        rf"#### {re.escape(escape_markdown_characters(subdir_yml_path))}", codebase
-    ), f"File {subdir_yml_path} not found in consolidated output"
+    assert re.search(rf"#### {re.escape(escape_markdown_characters(subdir_yml_path))}", epitaxy)
 
     subdir_svg_path = os.path.join("subdirectory", "vector.svg")
-    assert not re.search(
-        rf"#### {re.escape(escape_markdown_characters(subdir_svg_path))}", codebase
-    ), f"File {subdir_svg_path} should be excluded as per .codebaseignore"
+    assert not re.search(rf"#### {re.escape(escape_markdown_characters(subdir_svg_path))}", epitaxy)
 
 
 def test_consolidate_file_token_count(project_root, mock_project, mock_operations):  # pylint: disable=unused-argument
@@ -55,7 +48,7 @@ def test_consolidate_file_token_count(project_root, mock_project, mock_operation
         [
             f
             for f in mock_project.keys()
-            if not f.endswith(".codebaseignore") and not f.endswith(".png") and not f.endswith(".svg")
+            if not f.endswith(".epitaxyignore") and not f.endswith(".png") and not f.endswith(".svg")
         ]
     )
 
@@ -69,7 +62,7 @@ def test_consolidate_line_of_code_count(project_root, mock_project, mock_operati
     expected_lines_of_code_count = sum(
         len(content.split("\n"))
         for file_path, content in mock_project.items()
-        if not file_path.endswith((".codebaseignore", ".png", ".svg"))
+        if not file_path.endswith((".epitaxyignore", ".png", ".svg"))
     )
 
     assert lines_of_code_count == expected_lines_of_code_count
@@ -78,7 +71,7 @@ def test_consolidate_line_of_code_count(project_root, mock_project, mock_operati
 def test_consolidate_file_type_distribution(
     project_root, mock_project, mock_operations
 ):  # pylint: disable=unused-argument
-    codebase, file_count, *_ = consolidate(project_root)
+    epitaxy, file_count, *_ = consolidate(project_root)
 
     expected_types = {
         "py": 1,  # mock_project/python.py
@@ -91,7 +84,7 @@ def test_consolidate_file_type_distribution(
     assert file_count == file_type_distribution
 
     for file_type in expected_types:
-        assert re.search(rf"#### .*\.{file_type.lower()}", codebase, re.IGNORECASE)
+        assert re.search(rf"#### .*\.{file_type.lower()}", epitaxy, re.IGNORECASE)
 
 
 def test_consolidate_removes_trailing_whitespace():
