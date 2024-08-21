@@ -60,6 +60,6 @@ def test_filter_extensions_edge_cases():
 
 
 def test_parse_extensions_edge_cases():
-    assert parse_extensions(None, None, "") is None
+    assert parse_extensions(None, None, []) is None
     assert parse_extensions(None, None, ["py, js, css"]) == ["py", "js", "css"]
     assert parse_extensions(None, None, ["py", "js", "css"]) == ["py", "js", "css"]
