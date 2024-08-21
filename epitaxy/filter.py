@@ -1,8 +1,9 @@
 import os
+from typing import Any, Callable, List, Optional
 
 
-def skip_ignore_list_comments(file_path):
-    ignore_list = []
+def skip_ignore_list_comments(file_path: str) -> List[str]:
+    ignore_list: List[str] = []
     with open(file_path, "r", encoding="utf-8") as f:
         for line in f:
             line = line.strip()
@@ -11,21 +12,21 @@ def skip_ignore_list_comments(file_path):
     return ignore_list
 
 
-def read_epitaxyignore(project_root, extension_filter):
+def read_epitaxyignore(project_root: str, extension_filter: Optional[List[str]]) -> Callable[[str], bool]:
     """
     Excludes all files, extensions and directories specified in .epitaxyignore, located inside the root directory.
     """
     epitaxyignore = os.path.join(project_root, ".epitaxyignore")
     default_ignore_list = DEFAULT_IGNORE_LIST.copy()
 
-    ignore_list = []
+    ignore_list: List[str] = []
     if os.path.exists(epitaxyignore):
         with open(epitaxyignore, "r", encoding="utf-8") as f:
             ignore_list = [line.strip() for line in f if line.strip() and not line.startswith("#")]
 
     default_ignore_list.extend(ignore_list)
 
-    def exclude_files(file_path):
+    def exclude_files(file_path: str) -> bool:
         file_path = file_path.replace(os.sep, "/")
 
         if extension_filter:
@@ -58,7 +59,7 @@ def read_epitaxyignore(project_root, extension_filter):
     return exclude_files
 
 
-def filter_extensions(file_path, extensions):
+def filter_extensions(file_path: str, extensions: Optional[List[str]]) -> bool:
     """
     Optional filter to include only certain provided extensions in the consolidated markdown file. If no extensions are
     provided, all files are considered except files, extensions and directories that are explicitly excluded in the
@@ -70,7 +71,7 @@ def filter_extensions(file_path, extensions):
     return file_extension[1:] in extensions
 
 
-def parse_extensions(_csx, _param, value):
+def parse_extensions(_csx: Any, _param: Any, value: Optional[List[str]]) -> Optional[List[str]]:
     """
     Converts a comma-separated string of file extensions into a list of individual extensions, which - in turn - is
     parsed to the main function to filter files during the consolidation process.
@@ -78,7 +79,7 @@ def parse_extensions(_csx, _param, value):
     return [ext.strip() for item in value for ext in item.split(",")] if value else None
 
 
-DEFAULT_IGNORE_LIST = [
+DEFAULT_IGNORE_LIST: List[str] = [
     ".cache/",
     ".coverage",
     "dist/",
