@@ -1,5 +1,5 @@
 [project]
-name = "codebase"
+name = "chonk"
 description = "codebase consolidation tool"
 license = { file = "LICENSE" }
 requires-python = ">=3.12"
@@ -8,7 +8,7 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: GPL-3.0 License",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3 :: Only",
@@ -26,11 +26,11 @@ dynamic = ["version"]
 readme = "README.md"
 
 [project.urls]
-Changelog = "https://github.com/OLILHR/codebase/releases"
-Homepage = "https://github.com/OLILHR/codebase"
+Changelog = "https://github.com/OLILHR/chonk/releases"
+Homepage = "https://github.com/OLILHR/chonk"
 
 [project.scripts]
-codebase = "codebase.main:generate_markdown"
+chonk = "chonk.main:generate_markdown"
 
 [build-system]
 requires = ["pdm-backend"]
@@ -40,7 +40,7 @@ build-backend = "pdm.backend"
 source = "scm"
 
 [tool.pdm.build]
-includes = ["codebase"]
+includes = ["chonk"]
 excludes = ["/unittests"]
 
 [tool.pdm.readme]

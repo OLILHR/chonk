@@ -6,21 +6,21 @@ def skip_ignore_list_comments(file_path):
     with open(file_path, "r", encoding="utf-8") as f:
         for line in f:
             line = line.strip()
-            if line and not line.startswith("#"):  # ignore comments in .codebaseignore and DEFAULT_IGNORE_LIST
+            if line and not line.startswith("#"):  # ignore comments in .chonkignore and DEFAULT_IGNORE_LIST
                 ignore_list.append(line)
     return ignore_list
 
 
-def read_codebaseignore(project_root, extension_filter):
+def read_chonkignore(project_root, extension_filter):
     """
-    Excludes all files, extensions and directories specified in .codebaseignore, located inside the root directory.
+    Excludes all files, extensions and directories specified in .chonkignore, located inside the root directory.
     """
-    codebaseignore = os.path.join(project_root, ".codebaseignore")
+    chonkignore = os.path.join(project_root, ".chonkignore")
     default_ignore_list = DEFAULT_IGNORE_LIST.copy()
 
     ignore_list = []
-    if os.path.exists(codebaseignore):
-        with open(codebaseignore, "r", encoding="utf-8") as f:
+    if os.path.exists(chonkignore):
+        with open(chonkignore, "r", encoding="utf-8") as f:
             ignore_list = [line.strip() for line in f if line.strip() and not line.startswith("#")]
 
     default_ignore_list.extend(ignore_list)
@@ -62,7 +62,7 @@ def filter_extensions(file_path, extensions):
     """
     Optional filter to include only certain provided extensions in the consolidated markdown file. If no extensions are
     provided, all files are considered except files, extensions and directories that are explicitly excluded in the
-    specified .codebaseignore file, located inside the root directory.
+    specified .chonkignore file, located inside the root directory.
     """
     if not extensions:
         return True
@@ -94,8 +94,8 @@ DEFAULT_IGNORE_LIST = [
     "node_modules/",
     # Python
     "*.pyc",
-    # codebase-specific files
-    ".codebaseignore",
-    ".codebaseignore.example",
-    "codebase.md",
+    # chonk specific files
+    ".chonkignore",
+    ".chonkignore.example",
+    "chonk.md",
 ]

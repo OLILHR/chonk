@@ -53,8 +53,8 @@ README.md
 #     "node_modules/",
 #     # Python
 #     "*.pyc",
-#     # codebase-specific files
-#     ".codebaseignore",
-#     ".codebaseignore.example",
-#     "codebase.md",
+#     # chonk specific files
+#     ".chonkignore",
+#     ".chonkignore.example",
+#     "chonk.md",
 # ]
