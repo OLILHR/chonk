@@ -134,29 +134,27 @@ def generate_markdown(input_path, output_path, extension_filter):
             input_path, extensions
         )
     except NoMatchingExtensionError:
-        _logger.error("\n⚠️ NO FILES MATCH THE SPECIFIED EXTENSION(S) - PLEASE REVIEW YOUR .codebaseignore FILE.")
+        _logger.error("\n⚠️ NO FILES MATCH THE SPECIFIED EXTENSION(S) - PLEASE REVIEW YOUR .chonkignore FILE.")
         _logger.error("🔴 NO MARKDOWN FILE GENERATED.\n")
         return
 
     if len(markdown_content.encode("utf-8")) > MAX_FILE_SIZE:
-        _logger.error(
-            "\n" + "🔴 GENERATED CONTENT EXCEEDS 10 MB. CONSIDER ADDING LARGER FILES TO YOUR .codebaseignore."
-        )
+        _logger.error("\n" + "🔴 GENERATED CONTENT EXCEEDS 10 MB. CONSIDER ADDING LARGER FILES TO YOUR .chonkignore.")
         return
 
-    codebase = os.path.join(output_path, "codebase.md")
+    chonk = os.path.join(output_path, "chonk.md")
 
     os.makedirs(output_path, exist_ok=True)
-    with open(codebase, "w", encoding="utf-8") as f:
+    with open(chonk, "w", encoding="utf-8") as f:
         f.write(markdown_content)
 
-    codebase_size = os.path.getsize(codebase)
-    if codebase_size < 1024:
-        file_size = f"{codebase_size} bytes"
-    elif codebase_size < 1024 * 1024:
-        file_size = f"{codebase_size / 1024:.2f} KB"
+    chonk_size = os.path.getsize(chonk)
+    if chonk_size < 1024:
+        file_size = f"{chonk_size} bytes"
+    elif chonk_size < 1024 * 1024:
+        file_size = f"{chonk_size / 1024:.2f} KB"
     else:
-        file_size = f"{codebase_size / (1024 * 1024):.2f} MB"
+        file_size = f"{chonk_size / (1024 * 1024):.2f} MB"
 
     file_type_distribution = " ".join(
         f".{file_type} ({percentage:.0f}%)" for file_type, percentage in type_distribution
@@ -178,7 +176,7 @@ def generate_markdown(input_path, output_path, extension_filter):
         + "\n"
         + "🪙 TOKEN COUNT: %d"
         + "\n",
-        codebase,
+        chonk,
         file_size,
         file_count,
         file_type_distribution,
@@ -187,7 +185,7 @@ def generate_markdown(input_path, output_path, extension_filter):
     )
 
 
-# to run the script during local development, either execute $ python -m codebase
-# or install codebase locally via `pdm install` and simply run $ codebase
+# to run the script during local development, either execute $ python -m chonk
+# or install chonk locally via `pdm install` and simply run $ chonk
 if __name__ == "__main__":
     generate_markdown.main(standalone_mode=False)

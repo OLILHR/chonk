@@ -16,6 +16,6 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
-# coodebase-specific files
-.codebaseignore
-codebase.md
+# chonk specific files
+.chonkignore
+chonk.md
