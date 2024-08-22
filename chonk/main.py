@@ -1,10 +1,12 @@
 import logging
 import os
 from dataclasses import dataclass
+from typing import Any, Iterable, List, Optional
 
 import click
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import Completer, Completion
+from prompt_toolkit.document import Document
 
 from .filter import parse_extensions
 from .utilities import NoMatchingExtensionError, consolidate
@@ -15,17 +17,17 @@ logging.basicConfig(level=logging.INFO, format="%(message)s")
 _logger = logging.getLogger(__name__)
 _logger.setLevel(GLOBAL_LOG_LEVEL)
 
-MAX_FILE_SIZE = 1024 * 1024 * 10  # 10 MB
+MAX_FILE_SIZE: int = 1024 * 1024 * 10  # 10 MB
 
 
-def get_project_root():
+def get_project_root() -> str:
     """
     Required for input/output path prompts to display the project root as default path.
     """
 
-    current_dir = os.path.abspath(os.getcwd())
+    current_dir: str = os.path.abspath(os.getcwd())
 
-    root_indicators = [
+    root_indicators: List[str] = [
         ".git",
         "package.json",
         "pdm.lock",
@@ -47,17 +49,17 @@ class CaseInsensitivePathCompleter(Completer):
     only_directories: bool = False
     expanduser: bool = True
 
-    def get_completions(self, document, complete_event):
-        text = os.path.expanduser(document.text_before_cursor)
+    def get_completions(self, document: Document, complete_event: Any) -> Iterable[Completion]:
+        text: str = os.path.expanduser(document.text_before_cursor)
         if not text:
             return
 
-        directory = os.path.dirname(text)
-        prefix = os.path.basename(text)
-        full_directory = os.path.abspath(directory)
+        directory: str = os.path.dirname(text)
+        prefix: str = os.path.basename(text)
+        full_directory: str = os.path.abspath(directory)
 
         try:
-            suggestions = os.listdir(full_directory)
+            suggestions: List[str] = os.listdir(full_directory)
         except OSError:
             return
 
@@ -68,7 +70,7 @@ class CaseInsensitivePathCompleter(Completer):
                 yield Completion(suggestion[len(prefix) :], start_position=0, display=suggestion)
 
 
-def path_prompt(message, default, exists=False):
+def path_prompt(message: str, default: str, exists: bool = False) -> str:
     """
     Enables basic shell features, like relative path suggestion and autocompletion, for CLI prompts.
     """
@@ -78,8 +80,8 @@ def path_prompt(message, default, exists=False):
         default += os.path.sep
 
     while True:
-        path = prompt(f"{message} ", default=default, completer=path_completer)
-        full_path = os.path.abspath(os.path.expanduser(path))
+        path: str = prompt(f"{message} ", default=default, completer=path_completer)
+        full_path: str = os.path.abspath(os.path.expanduser(path))
         if not exists or os.path.exists(full_path):
             return full_path
         print(f"🔴 {full_path} DOES NOT EXIST.")
@@ -94,26 +96,23 @@ def path_prompt(message, default, exists=False):
     "extension_filter",
     callback=parse_extensions,
     multiple=True,
-    help="enables optional filtering by extensions, for instance: -f py,json",  # markdown contains only .py/.json files
+    help="enables optional filtering by extensions, for instance: -f py,json",
 )
 # pylint: disable=too-many-locals
-def generate_markdown(input_path, output_path, extension_filter):
-    no_flags_provided = input_path is None and output_path is None and not extension_filter
-    project_root = get_project_root()
+def generate_markdown(
+    input_path: Optional[str], output_path: Optional[str], extension_filter: Optional[List[str]]
+) -> None:
+    no_flags_provided: bool = input_path is None and output_path is None and not extension_filter
+    project_root: str = get_project_root()
 
-    if input_path is None:
-        input_path = path_prompt("📁 INPUT PATH OF YOUR TARGET DIRECTORY -", default=project_root, exists=True)
-    else:
-        input_path = os.path.abspath(input_path)
+    input_path = input_path or path_prompt(
+        "📁 INPUT PATH OF YOUR TARGET DIRECTORY -", default=project_root, exists=True
+    )
+    output_path = output_path or path_prompt("📁 OUTPUT PATH FOR THE MARKDOWN FILE -", default=project_root)
 
-    if output_path is None:
-        output_path = path_prompt("📁 OUTPUT PATH FOR THE MARKDOWN FILE -", default=project_root)
-    else:
-        output_path = os.path.abspath(output_path)
-
-    extensions = extension_filter
+    extensions: Optional[List[str]] = extension_filter
     if no_flags_provided:
-        extensions_input = click.prompt(
+        extensions_input: str = click.prompt(
             "🔎 OPTIONAL FILTER FOR SPECIFIC EXTENSIONS (COMMA-SEPARATED)",
             default="",
             show_default=False,
@@ -136,21 +135,21 @@ def generate_markdown(input_path, output_path, extension_filter):
         _logger.error("\n" + "🔴 GENERATED CONTENT EXCEEDS 10 MB. CONSIDER ADDING LARGER FILES TO YOUR .chonkignore.")
         return
 
-    chonk = os.path.join(output_path, "chonk.md")
+    chonk: str = os.path.join(output_path, "chonk.md")
 
     os.makedirs(output_path, exist_ok=True)
     with open(chonk, "w", encoding="utf-8") as f:
         f.write(markdown_content)
 
-    chonk_size = os.path.getsize(chonk)
+    chonk_size: int = os.path.getsize(chonk)
     if chonk_size < 1024:
-        file_size = f"{chonk_size} bytes"
+        file_size: str = f"{chonk_size} bytes"
     elif chonk_size < 1024 * 1024:
         file_size = f"{chonk_size / 1024:.2f} KB"
     else:
         file_size = f"{chonk_size / (1024 * 1024):.2f} MB"
 
-    file_type_distribution = " ".join(
+    file_type_distribution: str = " ".join(
         f".{file_type} ({percentage:.0f}%)" for file_type, percentage in type_distribution
     )
 

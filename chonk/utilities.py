@@ -3,6 +3,7 @@ import os
 import re
 from collections import Counter
 from dataclasses import dataclass
+from typing import List, Optional, Tuple
 
 import tiktoken
 from tqdm import tqdm
@@ -12,13 +13,13 @@ from .filter import filter_extensions, read_chonkignore
 _logger = logging.getLogger(__name__)
 
 
-def remove_trailing_whitespace(content):
+def remove_trailing_whitespace(content: str) -> str:
     content = re.sub(r"\n{3,}", "\n\n", content)
     content = re.sub(r" +$", "", content, flags=re.MULTILINE)
     return content
 
 
-def escape_markdown_characters(file_name):
+def escape_markdown_characters(file_name: str) -> str:
     """
     Escapes special characters in file names such as "__init__.py"
     in order to display paths correctly inside the output markdown file.
@@ -27,7 +28,7 @@ def escape_markdown_characters(file_name):
     return re.sub(special_chars, r"\\\1", file_name)
 
 
-def count_lines_of_code(content):
+def count_lines_of_code(content: str) -> int:
     """
     Counts the lines of code within each code blocks in the output markdown file.
     """
@@ -36,7 +37,7 @@ def count_lines_of_code(content):
     return lines_of_code
 
 
-def get_file_type_distribution(markdown_content):
+def get_file_type_distribution(markdown_content: str) -> List[Tuple[str, float]]:
     """
     Returns a distribution of the four most common file types in the output markdown file.
     """
@@ -56,7 +57,7 @@ def get_file_type_distribution(markdown_content):
     return type_distribution
 
 
-def count_tokens(text):
+def count_tokens(text: str) -> int:
     """
     Encoding for GPT-3.5/GPT-4.0.
     """
@@ -74,7 +75,9 @@ class NoMatchingExtensionError(Exception):
 
 
 # pylint: disable=too-many-locals
-def consolidate(path, extensions=None):
+def consolidate(
+    path: str, extensions: Optional[List[str]] = None
+) -> Tuple[str, int, int, int, List[Tuple[str, float]]]:
     """
     Gathers and formats the content and metadata of all files inside a provided input directory,
     while taking into account optional extension filters as well as .chonkignore specific exceptions.
@@ -86,7 +89,7 @@ def consolidate(path, extensions=None):
     token_count = 0
     lines_of_code_count = 0
 
-    matching_filter_extensions = []
+    matching_filter_extensions: List[str] = []
     for root, dirs, files in os.walk(path):
         dirs[:] = [d for d in dirs if not exclude_files(os.path.relpath(str(os.path.join(root, d)), path))]
         for file in files:

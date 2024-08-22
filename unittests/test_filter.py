@@ -29,7 +29,7 @@ def test_consolidate_only_specified_filters(
     )
 
 
-def test_extension_filter_bypasses_chonkignore(
+def test_filter_bypasses_chonkignore(
     project_root, mock_project, mock_operations, mock_chonkignore
 ):  # pylint: disable=unused-argument
     filtered_chonk, *_ = consolidate(project_root, extensions=["svg"])
@@ -60,6 +60,6 @@ def test_filter_extensions_edge_cases():
 
 
 def test_parse_extensions_edge_cases():
-    assert parse_extensions(None, None, "") is None
+    assert parse_extensions(None, None, []) is None
     assert parse_extensions(None, None, ["py, js, css"]) == ["py", "js", "css"]
     assert parse_extensions(None, None, ["py", "js", "css"]) == ["py", "js", "css"]
