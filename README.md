@@ -31,7 +31,7 @@ $ chonk
 
 and follow the prompts by providing an input directory, an output file destination and optional filters.
 
-Alternatively, the script can also be executed using a single command with the appropriate flags:  
+Alternatively, the script can be executed using a single command with the appropriate flags:  
 
 ```sh
 $ chonk -i <input_path> -o <output_path> -f <(optional) filters>

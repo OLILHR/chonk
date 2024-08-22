@@ -48,17 +48,13 @@ class CaseInsensitivePathCompleter(Completer):
     expanduser: bool = True
 
     def get_completions(self, document, complete_event):
-        text = document.text_before_cursor
-        if len(text) == 0:
+        text = os.path.expanduser(document.text_before_cursor)
+        if not text:
             return
 
         directory = os.path.dirname(text)
         prefix = os.path.basename(text)
-
-        if os.path.isabs(text):
-            full_directory = os.path.abspath(directory)
-        else:
-            full_directory = os.path.abspath(os.path.join(os.getcwd(), directory))
+        full_directory = os.path.abspath(directory)
 
         try:
             suggestions = os.listdir(full_directory)
@@ -69,9 +65,7 @@ class CaseInsensitivePathCompleter(Completer):
             if suggestion.lower().startswith(prefix.lower()):
                 if self.only_directories and not os.path.isdir(os.path.join(full_directory, suggestion)):
                     continue
-                completion = suggestion[len(prefix) :]
-                display = suggestion
-                yield Completion(completion, start_position=0, display=display)
+                yield Completion(suggestion[len(prefix) :], start_position=0, display=suggestion)
 
 
 def path_prompt(message, default, exists=False):
