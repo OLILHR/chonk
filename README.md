@@ -25,7 +25,8 @@ $ pip install chonk
 
 To use CHONK outside of Python environments, install the package globally and ensure that the Python
 executable is added to your system's `PATH`. On Windows, navigate to your environment variables and edit the `PATH`
-user variable to include `C:\Users\<user>\AppData\Roaming\Python\Python312\Scripts`.
+user variable to include `C:\Users\<user>\AppData\Roaming\Python\Python312\Scripts`. After restarting your PC, run
+`$ chonk --version` to verify that the package has been installed correctly.
 
 Execute the script simply by running
 

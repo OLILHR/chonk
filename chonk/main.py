@@ -88,7 +88,7 @@ def path_prompt(message: str, default: str, exists: bool = False) -> str:
         print(f"🔴 {full_path} DOES NOT EXIST.")
 
 
-def get_version_tag(ctx, value):
+def get_version(ctx, value):
     if not value or ctx.resilient_parsing:
         return
     click.echo(f"chonk version {version('chonk')}")
@@ -106,7 +106,7 @@ def get_version_tag(ctx, value):
     multiple=True,
     help="enables optional filtering by extensions, for instance: -f py,json",
 )
-@click.option("--version", "-v", is_flag=True, callback=get_version_tag, expose_value=False, is_eager=True, help="")
+@click.option("--version", "-v", is_flag=True, callback=get_version, expose_value=False, is_eager=True, help="")
 # pylint: disable=too-many-locals
 def generate_markdown(
     input_path: Optional[str], output_path: Optional[str], extension_filter: Optional[List[str]]
