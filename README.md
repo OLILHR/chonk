@@ -1,6 +1,6 @@
 <div align="center">
 
-<img width="75%" src="https://raw.githubusercontent.com/OLILHR/chonk/main/chonk.svg" alt="chonk.svg"><br>
+<img width="65%" src="https://raw.githubusercontent.com/OLILHR/chonk/main/chonk.svg" alt="chonk.svg"><br>
 
 <p>🧊 codebase consolidation.</p>
 
