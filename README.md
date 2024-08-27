@@ -1,6 +1,6 @@
 <div align="center">
 
-<img width="75%" src="https://raw.githubusercontent.com/OLILHR/chonk/main/chonk.svg" alt="chonk.svg"><br>
+<img width="65%" src="https://raw.githubusercontent.com/OLILHR/chonk/main/chonk.svg" alt="chonk.svg"><br>
 
 <p>🧊 codebase consolidation.</p>
 
@@ -19,11 +19,16 @@ $ pip install chonk
 ```
 
 > [!NOTE]
-> It is generally recommended to add a `.chonkignore` file to the root directory of the codebase you'd like to consolidate.
-> All files, folders and file extensions specified in `.chonkignore` will be excluded from the output file.
-> Please refer to the `.chonkignore.example` for suggestions regarding what to include in `.chonkignore`.
+> It is generally recommended to add a `.chonkignore` file to the root directory of the codebase you wish to consolidate.
+> Any files, folders, or file extensions specified in `.chonkignore` will be excluded from the output file.
+> Refer to the `.chonkignore.example` for suggestions regarding what to include in `.chonkignore`.
 
-To execute the script, simply run
+To use CHONK outside of Python environments, install the package globally and ensure that the Python
+executable is added to your system's `PATH`. On Windows, navigate to your environment variables and edit the `PATH`
+user variable to include `C:\Users\<user>\AppData\Roaming\Python\Python312\Scripts`. After restarting your PC, run
+`$ chonk --version` to verify that the package has been installed correctly.
+
+Execute the script simply by running
 
 ```sh
 $ chonk
