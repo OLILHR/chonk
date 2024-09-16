@@ -4,13 +4,11 @@
 #
 #    pip-compile '.\requirements-testing.in'
 #
-colorama==0.4.6
-    # via pytest
 iniconfig==2.0.0
     # via pytest
 packaging==24.1
     # via pytest
 pluggy==1.5.0
     # via pytest
-pytest==8.3.2
-    # via -r .\requirements-testing.in
+pytest==8.3.3
+    # via -r dev_requirements/requirements-testing.in
