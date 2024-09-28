@@ -82,13 +82,14 @@ def path_prompt(message: str, default: str, exists: bool = False) -> str:
 
     while True:
         path: str = prompt(f"{message} ", default=default, completer=path_completer)
+        path = path.strip()  # # remove leading and trailing whitespace
         full_path: str = os.path.abspath(os.path.expanduser(path))
         if not exists or os.path.exists(full_path):
             return full_path
         print(f"🔴 {full_path} DOES NOT EXIST.")
 
 
-def get_version(ctx, value):
+def get_version(ctx, _, value):
     if not value or ctx.resilient_parsing:
         return
     click.echo(f"chonk version {version('chonk')}")
