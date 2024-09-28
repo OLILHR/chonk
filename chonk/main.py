@@ -82,6 +82,7 @@ def path_prompt(message: str, default: str, exists: bool = False) -> str:
 
     while True:
         path: str = prompt(f"{message} ", default=default, completer=path_completer)
+        path = path.strip()  # # remove leading and trailing whitespace
         full_path: str = os.path.abspath(os.path.expanduser(path))
         if not exists or os.path.exists(full_path):
             return full_path
