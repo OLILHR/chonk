@@ -2,6 +2,28 @@ import os
 from typing import Any, Callable, List, Optional
 
 
+def get_project_root(start_path: str) -> str:
+    """
+    Find the project root directory based on common project files.
+    """
+    current_dir = os.path.abspath(start_path)
+    root_indicators = [
+        ".git",
+        "package.json",
+        "pdm.lock",
+        "pyproject.toml",
+        "setup.py",
+        "tox.ini",
+    ]
+
+    while current_dir != os.path.dirname(current_dir):
+        if any(os.path.exists(os.path.join(current_dir, indicator)) for indicator in root_indicators):
+            return current_dir
+        current_dir = os.path.dirname(current_dir)
+
+    return start_path
+
+
 def skip_ignore_list_comments(file_path: str) -> List[str]:
     ignore_list: List[str] = []
     with open(file_path, "r", encoding="utf-8") as f:
@@ -12,17 +34,17 @@ def skip_ignore_list_comments(file_path: str) -> List[str]:
     return ignore_list
 
 
-def read_chonkignore(project_root: str, extension_filter: Optional[List[str]]) -> Callable[[str], bool]:
+def read_chonkignore(input_path: str, extension_filter: Optional[List[str]]) -> Callable[[str], bool]:
     """
-    Excludes all files, extensions and directories specified in .chonkignore, located inside the root directory.
+    Excludes all files, extensions and directories specified in .chonkignore, located inside the input directory.
     """
+    project_root = get_project_root(input_path)
     chonkignore = os.path.join(project_root, ".chonkignore")
     default_ignore_list = DEFAULT_IGNORE_LIST.copy()
 
     ignore_list: List[str] = []
     if os.path.exists(chonkignore):
-        with open(chonkignore, "r", encoding="utf-8") as f:
-            ignore_list = [line.strip() for line in f if line.strip() and not line.startswith("#")]
+        ignore_list = skip_ignore_list_comments(chonkignore)
 
     default_ignore_list.extend(ignore_list)
 

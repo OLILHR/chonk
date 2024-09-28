@@ -82,8 +82,7 @@ def consolidate(
     Gathers and formats the content and metadata of all files inside a provided input directory,
     while taking into account optional extension filters as well as .chonkignore specific exceptions.
     """
-    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    exclude_files = read_chonkignore(project_root, extensions)
+    exclude_files = read_chonkignore(path, extensions)
     chonk = ""
     file_count = 0
     token_count = 0
