@@ -89,7 +89,7 @@ def path_prompt(message: str, default: str, exists: bool = False) -> str:
         print(f"🔴 {full_path} DOES NOT EXIST.")
 
 
-def get_version(ctx, value):
+def get_version(ctx, _, value):
     if not value or ctx.resilient_parsing:
         return
     click.echo(f"chonk version {version('chonk')}")
