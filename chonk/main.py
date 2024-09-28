@@ -9,7 +9,7 @@ from prompt_toolkit import prompt
 from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit.document import Document
 
-from .filter import parse_extensions
+from .filter import get_project_root, parse_extensions
 from .utilities import NoMatchingExtensionError, consolidate
 
 GLOBAL_LOG_LEVEL = logging.INFO
@@ -19,30 +19,6 @@ _logger = logging.getLogger(__name__)
 _logger.setLevel(GLOBAL_LOG_LEVEL)
 
 MAX_FILE_SIZE: int = 1024 * 1024 * 10  # 10 MB
-
-
-def get_project_root() -> str:
-    """
-    Required for input/output path prompts to display the project root as default path.
-    """
-
-    current_dir: str = os.path.abspath(os.getcwd())
-
-    root_indicators: List[str] = [
-        ".git",
-        "package.json",
-        "pdm.lock",
-        "pyproject.toml",
-        "setup.py",
-        "tox.ini",
-    ]
-
-    while current_dir != os.path.dirname(current_dir):
-        if any(os.path.exists(os.path.join(current_dir, indicator)) for indicator in root_indicators):
-            return current_dir
-        current_dir = os.path.dirname(current_dir)
-
-    return os.getcwd()
 
 
 @dataclass
@@ -82,7 +58,7 @@ def path_prompt(message: str, default: str, exists: bool = False) -> str:
 
     while True:
         path: str = prompt(f"{message} ", default=default, completer=path_completer)
-        path = path.strip()  # # remove leading and trailing whitespace
+        path = path.strip()  # remove leading and trailing whitespace
         full_path: str = os.path.abspath(os.path.expanduser(path))
         if not exists or os.path.exists(full_path):
             return full_path
@@ -113,7 +89,8 @@ def generate_markdown(
     input_path: Optional[str], output_path: Optional[str], extension_filter: Optional[List[str]]
 ) -> None:
     no_flags_provided: bool = input_path is None and output_path is None and not extension_filter
-    project_root: str = get_project_root()
+    current_dir = os.getcwd()
+    project_root: str = get_project_root(current_dir)
 
     input_path = input_path or path_prompt(
         "📁 INPUT PATH OF YOUR TARGET DIRECTORY -", default=project_root, exists=True

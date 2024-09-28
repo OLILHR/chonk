@@ -23,12 +23,8 @@ $ pip install chonk
 > Any files, folders, or file extensions specified in `.chonkignore` will be excluded from the output file.
 > Refer to the `.chonkignore.example` for suggestions regarding what to include in `.chonkignore`.
 
-To use CHONK outside of Python environments, install the package globally and ensure that the Python
-executable is added to your system's `PATH`. On Windows, navigate to your environment variables and edit the `PATH`
-user variable to include `C:\Users\<user>\AppData\Roaming\Python\Python312\Scripts`. After restarting your PC, run
-`$ chonk --version` to verify that the package has been installed correctly.
-
-Execute the script simply by running
+To use this package outside of Python environments, install the package globally and ensure that the Python
+executable is added to your system's `PATH`. Execute the script simply by running
 
 ```sh
 $ chonk
@@ -39,7 +35,7 @@ and follow the prompts by providing an input directory, an output file destinati
 Alternatively, the script can be executed using a single command with the appropriate flags:  
 
 ```sh
-$ chonk -i <input_path> -o <output_path> -f <(optional) filters>
+$ chonk -i <input_path> -o <output_path> -f <optional filters>
 ```
 
 For further information, run `$ chonk --help`.
