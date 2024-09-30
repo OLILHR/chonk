@@ -10,13 +10,9 @@ charset-normalizer==3.3.2
     # via requests
 click==8.1.7
     # via -r requirements.in
-colorama==0.4.6
-    # via
-    #   click
-    #   tqdm
 idna==3.7
     # via requests
-prompt-toolkit==3.0.47
+prompt-toolkit==3.0.48
     # via -r requirements.in
 regex==2024.7.24
     # via tiktoken
