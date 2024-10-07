@@ -18,7 +18,7 @@ regex==2024.7.24
     # via tiktoken
 requests==2.32.3
     # via tiktoken
-tiktoken==0.7.0
+tiktoken==0.8.0
     # via -r requirements.in
 tqdm==4.66.5
     # via -r requirements.in
