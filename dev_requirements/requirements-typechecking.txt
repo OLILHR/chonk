@@ -4,7 +4,7 @@
 #
 #    pip-compile '.\requirements-typechecking.in'
 #
-mypy==1.12.0
+mypy==1.12.1
     # via -r dev_requirements/requirements-typechecking.in
 mypy-extensions==1.0.0
     # via mypy
