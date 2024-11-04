@@ -83,7 +83,7 @@ packaging==24.1
     #   unearth
 pbs-installer==2024.8.9
     # via pdm
-pdm==2.19.3
+pdm==2.20.0.post1
     # via -r dev_requirements/requirements-packaging.in
 pkginfo==1.10.0
     # via twine
@@ -109,7 +109,7 @@ requests==2.32.3
     #   twine
 requests-toolbelt==1.0.0
     # via twine
-resolvelib==1.0.1
+resolvelib==1.1.0
     # via pdm
 rfc3986==2.0.0
     # via twine
