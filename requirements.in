@@ -1,3 +1,4 @@
+certifi>=2024.8.30
 click
 prompt_toolkit
 tiktoken

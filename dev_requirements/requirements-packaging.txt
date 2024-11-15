@@ -8,10 +8,11 @@ anyio==4.4.0
     # via httpx
 blinker==1.8.2
     # via pdm
-certifi==2024.7.4
+certifi==2024.8.30
     # via
     #   httpcore
     #   httpx
+    #   pdm
     #   requests
 cffi==1.17.0
     # via cryptography
@@ -35,8 +36,10 @@ h11==0.14.0
     # via httpcore
 hishel==0.0.33
     # via pdm
-httpcore==1.0.5
-    # via httpx
+httpcore==1.0.6
+    # via
+    #   httpx
+    #   pdm
 httpx[socks]==0.27.0
     # via
     #   hishel
@@ -83,7 +86,7 @@ packaging==24.1
     #   unearth
 pbs-installer==2024.8.9
     # via pdm
-pdm==2.20.0.post1
+pdm==2.20.1
     # via -r dev_requirements/requirements-packaging.in
 pkginfo==1.10.0
     # via twine
