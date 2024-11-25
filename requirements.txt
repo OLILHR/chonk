@@ -6,26 +6,26 @@
 #
 certifi==2024.8.30
     # via
-    #   -r /Users/olli/Github/chonk/requirements.in
+    #   -r requirements.in
     #   requests
 charset-normalizer==3.3.2
     # via requests
 click==8.1.7
-    # via -r /Users/olli/Github/chonk/requirements.in
+    # via -r requirements.in
 idna==3.7
     # via requests
 prompt-toolkit==3.0.48
-    # via -r /Users/olli/Github/chonk/requirements.in
+    # via -r requirements.in
 regex==2024.7.24
     # via tiktoken
 requests==2.32.3
     # via tiktoken
 tiktoken==0.8.0
-    # via -r /Users/olli/Github/chonk/requirements.in
-tqdm==4.67.0
-    # via -r /Users/olli/Github/chonk/requirements.in
+    # via -r requirements.in
+tqdm==4.67.1
+    # via -r requirements.in
 types-tqdm==4.66.0.20240417
-    # via -r /Users/olli/Github/chonk/requirements.in
+    # via -r requirements.in
 urllib3==2.2.2
     # via requests
 wcwidth==0.2.13
