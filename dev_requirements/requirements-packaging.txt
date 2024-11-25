@@ -86,7 +86,7 @@ packaging==24.1
     #   unearth
 pbs-installer==2024.8.9
     # via pdm
-pdm==2.20.1
+pdm==2.21.0
     # via -r dev_requirements/requirements-packaging.in
 pkginfo==1.10.0
     # via twine
