@@ -24,9 +24,13 @@ tiktoken==0.8.0
     # via -r requirements.in
 tqdm==4.67.1
     # via -r requirements.in
-types-tqdm==4.66.0.20240417
+types-requests==2.32.0.20241016
+    # via types-tqdm
+types-tqdm==4.67.0.20241119
     # via -r requirements.in
 urllib3==2.2.2
-    # via requests
+    # via
+    #   requests
+    #   types-requests
 wcwidth==0.2.13
     # via prompt-toolkit
