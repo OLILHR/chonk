@@ -50,8 +50,6 @@ idna==3.7
     #   anyio
     #   httpx
     #   requests
-importlib-metadata==8.2.0
-    # via twine
 installer==0.7.0
     # via pdm
 jaraco-classes==3.4.0
@@ -83,6 +81,7 @@ packaging==24.1
     #   dep-logic
     #   findpython
     #   pdm
+    #   twine
     #   unearth
 pbs-installer==2024.8.9
     # via pdm
@@ -134,7 +133,7 @@ tomlkit==0.13.0
     # via pdm
 truststore==0.9.1
     # via pdm
-twine==5.1.1
+twine==6.0.1
     # via -r dev_requirements/requirements-packaging.in
 typing-extensions==4.12.2
     # via hishel
@@ -146,5 +145,3 @@ urllib3==2.2.2
     #   twine
 virtualenv==20.26.3
     # via pdm
-zipp==3.19.2
-    # via importlib-metadata
