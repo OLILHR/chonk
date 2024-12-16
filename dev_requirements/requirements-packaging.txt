@@ -8,7 +8,7 @@ anyio==4.4.0
     # via httpx
 blinker==1.8.2
     # via pdm
-certifi==2024.8.30
+certifi==2024.12.14
     # via
     #   httpcore
     #   httpx
