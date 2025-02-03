@@ -4,7 +4,7 @@
 #
 #    pip-compile /Users/olli/Github/chonk/requirements.in
 #
-certifi==2024.12.14
+certifi==2025.1.31
     # via
     #   -r requirements.in
     #   requests
