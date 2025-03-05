@@ -3,7 +3,11 @@ import re
 
 import pytest
 
-from chonk.utilities import consolidate, escape_markdown_characters, remove_trailing_whitespace
+from chonk.utilities import (
+    consolidate,
+    escape_markdown_characters,
+    remove_trailing_whitespace,
+)
 
 
 def test_consolidate_excludes_ignored_files(
@@ -14,15 +18,25 @@ def test_consolidate_excludes_ignored_files(
 
     assert ".png" in chonkignore
     assert ".svg" in chonkignore
-    assert not re.search(rf"#### {re.escape(escape_markdown_characters('image.png'))}", chonk)
-    assert not re.search(rf"#### {re.escape(escape_markdown_characters('vector.svg'))}", chonk)
+    assert not re.search(
+        rf"#### {re.escape(escape_markdown_characters('image.png'))}", chonk
+    )
+    assert not re.search(
+        rf"#### {re.escape(escape_markdown_characters('vector.svg'))}", chonk
+    )
 
     assert ".markdown.md" not in chonkignore
     assert ".python.py" not in chonkignore
     assert "text.txt" not in chonkignore
-    assert re.search(rf"#### {re.escape(escape_markdown_characters('markdown.md'))}", chonk)
-    assert re.search(rf"#### {re.escape(escape_markdown_characters('python.py'))}", chonk)
-    assert re.search(rf"#### {re.escape(escape_markdown_characters('text.txt'))}", chonk)
+    assert re.search(
+        rf"#### {re.escape(escape_markdown_characters('markdown.md'))}", chonk
+    )
+    assert re.search(
+        rf"#### {re.escape(escape_markdown_characters('python.py'))}", chonk
+    )
+    assert re.search(
+        rf"#### {re.escape(escape_markdown_characters('text.txt'))}", chonk
+    )
 
 
 def test_consolidate_considers_subdirectories(
@@ -33,9 +47,15 @@ def test_consolidate_considers_subdirectories(
     print(f"Mock project structure: {mock_project}")
     print(f"Consolidated chonk:\n{chonk}")
 
-    assert re.search(rf"#### {re.escape(escape_markdown_characters('markdown.md'))}", chonk)
-    assert re.search(rf"#### {re.escape(escape_markdown_characters('text.txt'))}", chonk)
-    assert re.search(rf"#### {re.escape(escape_markdown_characters('python.py'))}", chonk)
+    assert re.search(
+        rf"#### {re.escape(escape_markdown_characters('markdown.md'))}", chonk
+    )
+    assert re.search(
+        rf"#### {re.escape(escape_markdown_characters('text.txt'))}", chonk
+    )
+    assert re.search(
+        rf"#### {re.escape(escape_markdown_characters('python.py'))}", chonk
+    )
 
     subdir_yml_path = os.path.join("subdirectory", "markup.yml")
     assert re.search(
@@ -48,14 +68,18 @@ def test_consolidate_considers_subdirectories(
     ), f"File {subdir_svg_path} should be excluded as per .chonkignore"
 
 
-def test_consolidate_file_token_count(project_root, mock_project, mock_operations):  # pylint: disable=unused-argument
+def test_consolidate_file_token_count(
+    project_root, mock_project, mock_operations
+):  # pylint: disable=unused-argument
     _, file_count, token_count, *_ = consolidate(project_root)
 
     expected_file_count = len(
         [
             f
             for f in mock_project.keys()
-            if not f.endswith(".chonkignore") and not f.endswith(".png") and not f.endswith(".svg")
+            if not f.endswith(".chonkignore")
+            and not f.endswith(".png")
+            and not f.endswith(".svg")
         ]
     )
 
@@ -63,7 +87,9 @@ def test_consolidate_file_token_count(project_root, mock_project, mock_operation
     assert token_count > 0
 
 
-def test_consolidate_line_of_code_count(project_root, mock_project, mock_operations):  # pylint: disable=unused-argument
+def test_consolidate_line_of_code_count(
+    project_root, mock_project, mock_operations
+):  # pylint: disable=unused-argument
     _, lines_of_code_count, *_ = consolidate(project_root)
 
     expected_lines_of_code_count = sum(
