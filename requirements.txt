@@ -10,7 +10,7 @@ charset-normalizer==3.4.1
     # via requests
 click==8.1.8
     # via chonk (pyproject.toml)
-idna==3.7
+idna==3.10
     # via requests
 prompt-toolkit==3.0.50
     # via chonk (pyproject.toml)
