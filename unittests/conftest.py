@@ -65,11 +65,7 @@ def mock_operations(monkeypatch, mock_project):
 
         for directory in directories:
             subdir = os.path.join(top, directory)
-            subdir_files = [
-                os.path.basename(f)
-                for f in mock_project.keys()
-                if os.path.dirname(f) == subdir
-            ]
+            subdir_files = [os.path.basename(f) for f in mock_project.keys() if os.path.dirname(f) == subdir]
             yield subdir, [], subdir_files
 
     monkeypatch.setattr("builtins.open", _mock_open)
