@@ -73,8 +73,18 @@ def get_version(ctx, _, value):
 
 
 @click.command()
-@click.option("-i", "--input-path", type=click.Path(exists=True), help="input path for the files to be consolidated")
-@click.option("-o", "--output-path", type=click.Path(), help="output path for the generated markdown file")
+@click.option(
+    "-i",
+    "--input-path",
+    type=click.Path(exists=True),
+    help="input path for the files to be consolidated",
+)
+@click.option(
+    "-o",
+    "--output-path",
+    type=click.Path(),
+    help="output path for the generated markdown file",
+)
 @click.option(
     "--filter",
     "-f",
@@ -83,10 +93,20 @@ def get_version(ctx, _, value):
     multiple=True,
     help="enables optional filtering by extensions, for instance: -f py,json",
 )
-@click.option("--version", "-v", is_flag=True, callback=get_version, expose_value=False, is_eager=True, help="")
+@click.option(
+    "--version",
+    "-v",
+    is_flag=True,
+    callback=get_version,
+    expose_value=False,
+    is_eager=True,
+    help="",
+)
 # pylint: disable=too-many-locals
 def generate_markdown(
-    input_path: Optional[str], output_path: Optional[str], extension_filter: Optional[List[str]]
+    input_path: Optional[str],
+    output_path: Optional[str],
+    extension_filter: Optional[List[str]],
 ) -> None:
     no_flags_provided: bool = input_path is None and output_path is None and not extension_filter
     current_dir = os.getcwd()
@@ -110,9 +130,13 @@ def generate_markdown(
     extensions = list(extensions) if extensions else None
 
     try:
-        markdown_content, file_count, token_count, lines_of_code_count, type_distribution = consolidate(
-            input_path, extensions
-        )
+        (
+            markdown_content,
+            file_count,
+            token_count,
+            lines_of_code_count,
+            type_distribution,
+        ) = consolidate(input_path, extensions)
     except NoMatchingExtensionError:
         _logger.error("\n⚠️ NO FILES MATCH THE SPECIFIED EXTENSION(S) - PLEASE REVIEW YOUR .chonkignore FILE.")
         _logger.error("🔴 NO MARKDOWN FILE GENERATED.\n")
