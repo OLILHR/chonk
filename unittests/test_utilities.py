@@ -3,7 +3,15 @@ import re
 
 import pytest
 
+<<<<<<< Updated upstream
 from chonk.utilities import consolidate, escape_markdown_characters, remove_trailing_whitespace
+=======
+from src import (
+    consolidate,
+    escape_markdown_characters,
+    remove_trailing_whitespace,
+)
+>>>>>>> Stashed changes
 
 
 def test_consolidate_excludes_ignored_files(

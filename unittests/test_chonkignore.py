@@ -1,7 +1,7 @@
 import os
 from unittest.mock import mock_open, patch
 
-from chonk.filter import read_chonkignore, skip_ignore_list_comments
+from src import read_chonkignore, skip_ignore_list_comments
 
 
 def test_read_chonkignore(

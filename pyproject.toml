@@ -25,6 +25,34 @@ dependencies = [
 dynamic = ["version"]
 readme = "README.md"
 
+[project.optional-dependencies]
+testing = [
+    "pytest==8.3.5"
+]
+linting = [
+    "pylint==3.3.4"
+]
+typechecking = [
+    "mypy==1.15.0"
+]
+spellchecking = [
+    "codespell==2.4.1"
+]
+coverage = [
+    "coverage==7.6.12"
+]
+formatting = [
+    "black==25.1.0",
+    "isort==6.0.1"
+]
+packaging = [
+    "build==1.2.2.post1",
+    "twine==6.1.0"
+]
+dev = [
+    "pip-tools"
+]
+
 [project.urls]
 Changelog = "https://github.com/OLILHR/chonk/releases"
 Homepage = "https://github.com/OLILHR/chonk"
