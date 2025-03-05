@@ -14,7 +14,7 @@ idna==3.7
     # via requests
 prompt-toolkit==3.0.50
     # via chonk (pyproject.toml)
-regex==2024.7.24
+regex==2024.11.6
     # via tiktoken
 requests==2.32.3
     # via tiktoken
