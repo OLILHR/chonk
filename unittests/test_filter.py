@@ -1,8 +1,8 @@
 import os
 import re
 
-from src import filter_extensions, parse_extensions
-from src import consolidate, escape_markdown_characters
+from chonk.filter import filter_extensions, parse_extensions
+from chonk.utilities import consolidate, escape_markdown_characters
 
 
 def test_consolidate_only_specified_filters(
