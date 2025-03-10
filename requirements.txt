@@ -22,7 +22,7 @@ tiktoken==0.9.0
     # via chonk (pyproject.toml)
 tqdm==4.67.1
     # via chonk (pyproject.toml)
-types-requests==2.32.0.20250301
+types-requests==2.32.0.20250306
     # via types-tqdm
 types-tqdm==4.67.0.20250301
     # via chonk (pyproject.toml)
