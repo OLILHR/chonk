@@ -2,7 +2,7 @@
 name = "chonk"
 description = "codebase consolidation tool"
 license = { file = "LICENSE" }
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 authors = [{ name = "OLILHR" }]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -61,19 +61,28 @@ Homepage = "https://github.com/OLILHR/chonk"
 chonk = "chonk.main:generate_markdown"
 
 [build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
+requires = ["hatchling>=1.8.0", "hatch-vcs", "hatch-fancy-pypi-readme"]
+build-backend = "hatchling.build"
 
-[tool.pdm.version]
-source = "scm"
-
-[tool.pdm.build]
-includes = ["chonk"]
-excludes = ["/unittests"]
-
-[tool.pdm.readme]
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
 content-type = "text/markdown"
-path = "README.md"
+fragments = [{ path = "README.md" }]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/_package_version.py"
+template = '''
+VERSION = "{version}"
+'''
+
+[tool.hatch.build.targets.sdist]
+exclude = ["/unittests"]
+
+[tool.hatch.build.targets.wheel]
+only-include = ["src"]
+sources = ["src"]
 
 [tool.black]
 line-length = 120
@@ -97,3 +106,5 @@ disable = [
     "fixme",
     "missing-docstring"
 ]
+
+
