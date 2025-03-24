@@ -10,6 +10,7 @@
 __pycache__/
 dist/
 htmlcov/
+src/_chonk_version.py
 
 # OS
 .DS_Store
