@@ -190,6 +190,5 @@ def generate_markdown(
 
 
 # to run the script during local development, either execute $ python -m chonk
-# or install chonk locally via `pdm install` and simply run $ chonk
 if __name__ == "__main__":
     generate_markdown.main(standalone_mode=False)

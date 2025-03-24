@@ -3,7 +3,6 @@
 
 .coverage
 .idea/
-.pdm-build/
 .pytest_cache/
 .tox/
 .venv
