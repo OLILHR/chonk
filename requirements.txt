@@ -24,7 +24,7 @@ tqdm==4.67.1
     # via chonk (pyproject.toml)
 types-requests==2.32.0.20250306
     # via types-tqdm
-types-tqdm==4.67.0.20250301
+types-tqdm==4.67.0.20250319
     # via chonk (pyproject.toml)
 urllib3==2.3.0
     # via
